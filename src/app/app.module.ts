@@ -8,21 +8,24 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 
 import { environment } from '../environments/environment';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { reducers, metaReducers } from './reducers/';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AppMaterialModule } from './modules/app-material.module';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogComponent } from './components/blog/blog.component';
-import { EffectsModule } from '@ngrx/effects';
-import { BlogEffects } from './effects/blog';
 import { HomeComponent } from './pages/home/home.component';
-import { reducer as blogReducer } from './reducers/blogs';
+import { HeaderComponent } from './components/header/header.component';
+import { MenuComponent } from './components/menu/menu.component';
+import { LoginComponent } from './components/login/login.component';
+import { AccountComponent } from './components/account/account.component';
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoginFormComponent } from './components/forms/login-form/login-form.component';
+import { NewUserDialogComponent } from './components/dialogs/new-user-dialog/new-user-dialog.component';
 
 @NgModule({
   declarations: [
@@ -31,22 +34,25 @@ import { reducer as blogReducer } from './reducers/blogs';
     BlogListComponent,
     BlogComponent,
     HomeComponent,
+    HeaderComponent,
+    MenuComponent,
+    LoginComponent,
+    AccountComponent,
+    LoginFormComponent,
+    NewUserDialogComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFireDatabaseModule,
-    StoreModule.forRoot({ blogs: blogReducer }),
-    EffectsModule.forRoot([BlogEffects]),
+    AngularFireStorageModule,
     FlexLayoutModule,
     AppMaterialModule, // import the Angular Material modules after Angular's BrowserModule
-    StoreDevtoolsModule.instrument({
-      maxAge: 25, // Retains last 25 states
-      logOnly: environment.production, // Restrict extension to log-only mode
-    }),
   ],
   providers: [],
   bootstrap: [AppComponent]

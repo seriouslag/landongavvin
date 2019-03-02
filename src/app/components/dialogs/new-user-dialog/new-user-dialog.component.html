@@ -1,0 +1,77 @@
+<h1 mat-dialog-title>Profile Setup</h1>
+<mat-vertical-stepper>
+
+  <mat-step [stepControl]="occupationForm">
+    <form [formGroup]="occupationForm">
+      <ng-template matStepLabel>Your Occupation</ng-template>
+      <mat-form-field>
+        <input matInput
+          placeholder="Occupation"
+          formControlName="occupation">
+      </mat-form-field>
+    </form>
+    <button mat-button
+      matStepperNext>Next</button>
+  </mat-step>
+  <mat-step [stepControl]="companyForm">
+    <form [formGroup]="companyForm">
+      <ng-template matStepLabel>Your Company</ng-template>
+      <mat-form-field>
+        <input matInput
+          placeholder="Company"
+          formControlName="company">
+      </mat-form-field>
+    </form>
+    <div fxLayout="row">
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        matStepperNext>Next</button>
+    </div>
+  </mat-step>
+  <mat-step [stepControl]="bioForm">
+    <form [formGroup]="bioForm">
+      <ng-template matStepLabel>Your Bio</ng-template>
+      <mat-form-field>
+        <textarea matInput
+          matTextareaAutosize
+          formControlName="bio"
+          [matAutosizeMaxRows]="15"
+          placeholder="Write a little about yourself"
+          [attr.maxlength]="280"></textarea>
+      </mat-form-field>
+    </form>
+    <div fxLayout="row">
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        matStepperNext>Next</button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Get Verified</ng-template>
+    <div fxLayout="column">
+      <button type="button"
+        mat-button
+        (click)="sendEmailVerification()">Send Email</button>
+      <div fxLayout="row">
+        <button mat-button
+          matStepperPrevious>Back</button>
+        <button mat-button
+          matStepperNext>Next</button>
+      </div>
+    </div>
+
+
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Save your info</ng-template>
+    <div fxLayout="row">
+      <button mat-button
+        matStepperPrevious>Back</button>
+      <button mat-button
+        (click)="saveInfo()">Save</button>
+    </div>
+  </mat-step>
+
+</mat-vertical-stepper>

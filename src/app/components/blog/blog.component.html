@@ -1,3 +1,32 @@
-<p>
-  blog works!
-</p>
+<mat-card class="blog">
+  <mat-card-header>
+    <mat-card-title>
+      {{blog.title}}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{blog.subtitle}}
+    </mat-card-subtitle>
+  </mat-card-header>
+    <div class="videoContainer"
+      *ngIf="blog.hasVideo">
+      <video poster="{{blog.image}}"
+        preload="auto"
+        muted
+        loop
+        autoplay="false"
+        class="video">
+        <source src="{{blog.image}}"
+          type="video/{{blog.videoType}}">
+      </video>
+    </div>
+    <img src="{{blog.image}}"
+      mat-card-image
+      *ngIf="!blog.hasVideo && blog.image.length>0"
+      [ngClass]="{'blogImageLarge': cardSize === 3, 'blogImageMed': cardSize === 2, 'blogImageSmall': cardSize === 1, 'blogImageXSmall': cardSize === 0}">
+  <mat-card-content>
+    {{blog.content}}
+  </mat-card-content>
+  <mat-card-footer>
+    {{blog.footer}}
+  </mat-card-footer>
+</mat-card>

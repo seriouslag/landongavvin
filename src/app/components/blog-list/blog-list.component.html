@@ -1,3 +1,10 @@
-<p>
-  blog-list works!
-</p>
+<div
+  fxLayout="column"
+  fxLayoutAlign="space-around center"
+>
+  <app-blog
+    *ngFor="let blog of blogs | async; index as i"
+    [blog]="blog"
+  >
+  </app-blog>
+</div>
