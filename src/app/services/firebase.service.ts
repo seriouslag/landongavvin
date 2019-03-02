@@ -113,7 +113,7 @@ export class FirebaseService {
 
   public async sendEmailVerification(): Promise<void> {
     try {
-      const emailResponse = await this.auth.auth.currentUser.sendEmailVerification()
+      const emailResponse = await this.auth.auth.currentUser.sendEmailVerification();
       this.snackBar.open('A verification email has been sent to ' + this.auth.auth.currentUser.email, 'OK', { duration: 4000 });
     } catch (e) {
       this.snackBar.open('Failed to send a verification email please try again later.', 'OK', { duration: 4000 });
