@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './modules/app-routing.module';
@@ -26,6 +26,9 @@ import { AccountComponent } from './components/account/account.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginFormComponent } from './components/forms/login-form/login-form.component';
 import { NewUserDialogComponent } from './components/dialogs/new-user-dialog/new-user-dialog.component';
+import { MatIconRegistry } from '@angular/material';
+import { HttpClientModule } from '@angular/common/http';
+import { QuestionDialogComponent } from './components/dialogs/question-dialog/question-dialog.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,7 @@ import { NewUserDialogComponent } from './components/dialogs/new-user-dialog/new
     AccountComponent,
     LoginFormComponent,
     NewUserDialogComponent,
+    QuestionDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -52,9 +56,16 @@ import { NewUserDialogComponent } from './components/dialogs/new-user-dialog/new
     AngularFireDatabaseModule,
     AngularFireStorageModule,
     FlexLayoutModule,
-    AppMaterialModule, // import the Angular Material modules after Angular's BrowserModule
+    AppMaterialModule, // import the Angular Material modules after Angular's BrowserModule,
+    HttpClientModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [QuestionDialogComponent, NewUserDialogComponent],
 })
-export class AppModule { }
+export class AppModule {
+  constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) {
+    matIconRegistry
+    .addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/mdi.svg'));
+  }
+}

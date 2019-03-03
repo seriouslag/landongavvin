@@ -1,0 +1,7 @@
+<mat-icon *ngIf="editUser.isVerified === true"
+  matTooltip="This user is email verified.">check</mat-icon>
+<mat-icon *ngIf="editMode !== true && editUser.isVerified !== true"
+  matTooltip="This user is not verified.">close</mat-icon>
+<button *ngIf="editMode === true && editUser.isVerified !== true"
+  mat-raised-button
+  (click)="sendEmailVerification()">Send Email Verification</button>

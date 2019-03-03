@@ -6,10 +6,10 @@ import { HomeComponent } from '../pages/home/home.component';
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  // { path: 'about', redirectTo: 'about/LandonGavin', pathMatch: 'full' },
-  // { path: 'about/:vanity', loadChildren: 'app/pages/about/about.page.module#AboutPageModule' },
-  // { path: 'account', loadChildren: 'app/pages/account/account.page.module#AccountPageModule' },
-  // { path: 'login', loadChildren: 'app/pages/login/login.page.module#LoginPageModule' },
+  { path: 'about', redirectTo: 'about/LandonGavin', pathMatch: 'full' },
+  { path: 'about/:vanity', loadChildren: '../pages/about-page/about-page.module#AboutPageModule' },
+  { path: 'account', loadChildren: '../pages/account-page/account-page.module#AccountPageModule' },
+  // { path: 'login', loadChildren: '../pages/login/login.page.module#LoginPageModule' },
 
   /*
     Lazy loading with a wildcard does not work with angular4 yet.

@@ -3,7 +3,7 @@ import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 import { Blog } from '../models/Blog';
 import { Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { take } from 'rxjs/operators';
+import { take, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import * as firebase from 'firebase/app';
 import { User } from '../models/User';
@@ -28,6 +28,88 @@ export class FirebaseService {
     this.blogsRef = this.db.list<Blog>('/blog');
 
     this.user = auth.authState;
+  }
+
+  public async updateImageCacheControl(path: string, fileName: string) {
+    const newMetadata = {
+      cacheControl: 'public,max-age=604800'
+    };
+
+    try {
+      const ref = this.storage.ref('/').child(path);
+      const imageRef = ref.child(fileName);
+      // updateMetatdata not updateMetadata because of typo in library
+      const result = await imageRef.updateMetatdata(newMetadata);
+      result.pipe(take(1)).subscribe();
+    } catch (e) {
+      this.handleStorageErrors(e);
+    }
+  }
+
+  private handleStorageErrors(error) {
+    let message: string;
+    switch (error.code) {
+      case 'storage/unknown':
+        message = 'An unknown error occurred.';
+        break;
+      case 'storage/object-not-found':
+        message = 'No object exists at the desired reference.';
+        break;
+      case 'storage/bucket-not-found':
+        message = 'No bucket is configured for Cloud Storage';
+        break;
+      case 'storage/project-not-found':
+        message = 'No project is configured for Cloud Storage';
+        break;
+      case 'storage/quota-exceeded':
+        message = `Quota on your Cloud Storage bucket
+                   has been exceeded. If you're on the free tier,
+                   upgrade to a paid plan.If you're on a paid plan,
+                   reach out to Firebase support.`;
+        break;
+      case 'storage/unauthenticated	':
+        message = 'User is unauthenticated, please authenticate and try again.';
+        break;
+      case 'storage/unauthorized':
+        message = 'User is not authorized to perform the desired action, check your security rules to ensure they are correct.';
+        break;
+      case 'storage/retry-limit-exceeded':
+        message = 'The maximum time limit on an operation (upload, download, delete, etc.) has been excceded. Try uploading again.';
+        break;
+      case 'storage/invalid-checksum':
+        message = 'File on the client does not match the checksum of the file received by the server. Try uploading again.';
+        break;
+      case 'storage/canceled':
+        message = 'User canceled the operation.';
+        break;
+      case 'storage/invalid-event-name':
+        message = 'Invalid event name provided. Must be one of [`running`, `progress`, `pause`]';
+        break;
+      case 'storage/invalid-url':
+        message = `Invalid URL provided to refFromURL().
+                   Must be of the form: gs://bucket/object
+                   or https://firebasestorage.googleapis.com/v0/b/bucket/o/object?token=<TOKEN>`;
+        break;
+      case 'storage/invalid-argument':
+        message = `The argument passed to put() must be 'File',
+                  'Blob', or 'UInt8' Array. The argument passed to putString() must be a raw,
+                  'Base64', or 'Base64URL' string.`;
+        break;
+      case 'storage/no-default-bucket':
+        message = `No bucket has been set in your config's storageBucket property.`;
+        break;
+      case 'storage/cannot-slice-blob':
+        message = `Commonly occurs when the local file has changed
+                   (deleted, saved again, etc.). Try uploading again after verifying that the file hasn't changed.`;
+        break;
+      case 'storage/server-file-wrong-size':
+        message = '	File on the client does not match the size of the file recieved by the server. Try uploading again.';
+        break;
+      default:
+        message = 'An unknown error occurred.';
+    }
+
+    console.log(message, error);
   }
 
   public getBlogs(): Observable<Blog[]> {
@@ -74,10 +156,12 @@ export class FirebaseService {
         take(1)
       ).toPromise();
 
-      if (user === null) {
-        console.log('Failed to login through Google provider.');
+      if (user !== null) {
+        console.log('logged in via Google provider.');
         return;
       }
+
+      console.log('Logged in via Google provider; Now creating user in DB;');
 
       const tempUser: User = {} as User;
       tempUser.dateCreated = Date.now().toString();
@@ -101,7 +185,7 @@ export class FirebaseService {
         bio: '', job: '', company: '', twitter: '',
         facebook: '', instagram: '', twitch: '', youtube: '',
         google: '', uid: tempUser.uid, linkedin: '', resumeLink: '',
-        vanity: tempUser.uid,
+        github: '', vanity: tempUser.uid,
         dateCreated: tempUser.dateCreated, image: '', isVerified: false
       } as User);
     } catch (e) {
@@ -143,8 +227,10 @@ export class FirebaseService {
     return this.db.object('users/' + lgUser.uid).set(lgUser);
   }
 
-  public getUIDByVanity(vanity: string): Observable<{}> {
-    return this.db.object('/vanities/' + vanity).valueChanges();
+  public getUIDByVanity(vanity: string): Observable<string> {
+    return this.db.object('/vanities/' + vanity).valueChanges().pipe(
+      map((uid) => uid.toString())
+    );
   }
 
   public async sendEmailVerification(): Promise<void> {
@@ -156,8 +242,13 @@ export class FirebaseService {
     }
   }
 
-  public getUserProfileImg(uid: string): Promise<string> {
-    return this.storage.ref('users/' + uid + '/profile.jpg').getDownloadURL().pipe(take(1)).toPromise();
+  public async getUserProfileImg(uid: string): Promise<string> {
+    try {
+      const response = this.storage.ref('users').child(uid).child('/profile.jpg').getDownloadURL().pipe(take(1)).toPromise();
+      return response;
+    } catch (e) {
+      return null;
+    }
   }
 
   public fetchProvidersForEmail(email: string): Promise<string[]> {
@@ -234,7 +325,7 @@ export class FirebaseService {
           bio: '', job: '', company: '', twitter: '',
           facebook: '', instagram: '', twitch: '', youtube: '',
           google: '', uid: user.uid, linkedin: '', resumeLink: '',
-          vanity: user.uid.toLowerCase(),
+          github: '', vanity: user.uid.toLowerCase(),
           dateCreated: Date.now().toString(), image: '', isVerified: false
         } as User);
         this.setUserVanity(user.uid.toLowerCase());

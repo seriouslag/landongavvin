@@ -1,0 +1,43 @@
+<a [href]='"https://" + href'
+  *ngIf="editMode !== true && link">
+  <button mat-icon-button
+    matTooltip="{{type.substring(0,1).toUpperCase() + type.substring(1).toLowerCase()}}">
+    <mat-icon svgIcon="{{icon}}"></mat-icon>
+  </button>
+</a>
+
+<div *ngIf="editMode === true">
+  <button mat-icon-button
+    [matMenuTriggerFor]="edit"
+    (click)="toggleEditPanel()"
+  >
+    <mat-icon [ngClass]="{'nolink': link === ''}" svgIcon="{{icon}}"></mat-icon>
+  </button>
+
+  <mat-menu #edit="matMenu">
+    <div (click)="$event.stopPropagation()"
+      fxLayout="row"
+      class="inputMenuItem">
+      <mat-form-field [ngClass]="{'smallInput': mediaAlias === 'xs' || mediaAlias === 'sm'}">
+        <input #input
+          matInput
+          placeholder="{{href.substring(0, href.lastIndexOf('/') + 1)}}"
+          (click)="$event.stopPropagation()"
+          [ngModel]="link"
+          (ngModelChange)="onInput($event)"
+          (keyup.enter)="onEnter()"
+          [attr.maxlength]="48"
+          type="text">
+        <mat-hint align="end">{{input.value.length}} / {{input.maxLength}}</mat-hint>
+      </mat-form-field>
+      <button mat-button
+        matTooltip="Confirm"
+        [ngClass]="{'smallButton': mediaAlias === 'xs' || mediaAlias === 'sm'}"
+        [matTooltipShowDelay]="500"
+        (click)="onEnter()"
+        class="check">
+        <mat-icon>check</mat-icon>
+      </button>
+    </div>
+  </mat-menu>
+</div>

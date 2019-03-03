@@ -1,6 +1,8 @@
 <form [formGroup]="loginForm"
   novalidate
-  (submit)="loginWithEmail()">
+  (submit)="loginWithEmail()"
+  fxLayout="column"  
+>
   <mat-form-field>
     <input matInput
       placeholder="Email"
@@ -30,7 +32,7 @@
       Your password is required to login.
     </mat-hint>
   </mat-form-field>
-  <div fxLayout="row"
+  <div fxLayout="column"
     fxLayoutAlign="space-around center">
     <button mat-button
       [disabled]="loginForm.invalid">
@@ -40,15 +42,10 @@
       matTooltip="Login with Google"
       type="button"
       matTooltipShowDelay="500"
-      (click)="loginWithGoogle()">
-      <span fxLayout="row"
-        fxLayoutAlign="center center">
-        <span>Sign In with</span>
-        <span fxFlex="5px"></span>
-        <span class="google icon-wrapper">
-          <i class="mdi mdi-18px mdi-google"></i>
-        </span>
-      </span>
+      (click)="loginWithGoogle()"
+    >
+        Sign In with
+        <mat-icon svgIcon="google"></mat-icon>
     </button>
   </div>
 </form>

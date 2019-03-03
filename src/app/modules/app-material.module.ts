@@ -11,7 +11,8 @@ import {
   MatRadioModule,
   MatSnackBarModule,
   MatStepperModule,
-  MatDialogModule
+  MatDialogModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 
@@ -28,7 +29,8 @@ const materialArray = [
   MatRadioModule,
   MatSnackBarModule,
   MatStepperModule,
-  MatDialogModule
+  MatDialogModule,
+  MatProgressSpinnerModule
 ];
 
 @NgModule({

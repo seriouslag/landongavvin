@@ -1,0 +1,31 @@
+<span *ngIf="editMode === false">
+  {{text}}
+</span>
+
+<mat-form-field *ngIf="editMode === true && type === 'textarea'">
+
+  <textarea #input
+    matInput
+    matTextareaAutosize
+    [matAutosizeMaxRows]="15"
+    placeholder="{{placeholder}}"
+    (keyup.enter)="onEnter()"
+    [ngModel]="text"
+    (ngModelChange)="onInput($event)"
+    [attr.maxlength]="maxlength"></textarea>
+  <mat-hint align="end">{{input.value.length}} / {{maxlength}}</mat-hint>
+</mat-form-field>
+
+<mat-form-field *ngIf="editMode === true && type !== 'textarea'"
+  class="smallInput">
+
+  <input #input
+    matInput
+    placeholder="{{placeholder}}"
+    [ngModel]="text"
+    (ngModelChange)="onInput($event)"
+    (keyup.enter)="onEnter()"
+    [attr.maxlength]="maxlength"
+    type="text">
+  <mat-hint align="end">{{input.value.length}} / {{maxlength}}</mat-hint>
+</mat-form-field>

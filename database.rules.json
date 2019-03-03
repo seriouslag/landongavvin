@@ -1,0 +1,72 @@
+{
+	"rules": {
+		".read": false,
+		".write": false,
+		"blog": {
+			".read": true,
+			".write": "auth != null && auth.uid === 'backend-service-worker'",
+			".indexOn": ["id"],
+			"$blog_id": {
+				"timestamp": {
+					".validate": "newData.val() <= now"
+				}
+			}
+		},
+    "vanities": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+		"users": {
+			"$uid": {
+				".read": "true",
+				".write": "auth != null && auth.uid == $uid",
+          
+        "info": {
+          
+        },
+          
+				"posts": {
+          ".read": "auth != null && auth.uid == $uid",
+					".write": "auth != null && auth.uid == $uid",
+					"private": {
+						"$post_id": {
+							".read": "(auth != null && auth.uid == $uid) || root.child('users/' + $uid + '/friends/ + auth.uid').exists()",
+							"timestamp": {
+								".validate": "newData.val() <= now"
+							}
+						}
+					},
+					"public": {
+						".read": true,
+						".indexOn": ["timestamp"],
+						"$post_id": {
+							"timestamp": {
+								".validate": "newData.val() <= now"
+							}
+						}
+					}
+				},
+				"friends": {
+					".read": true,
+					".write": "auth.uid === 'backend-service-worker'",
+					"$uid": {
+						".validate": "root.child('users/'+$uid).exists()",
+						"timestamp": {
+							".validate": "newData.val() <= now"
+						}
+					}
+				},
+				"blocked": {
+					".read": "auth != null && auth.uid == $uid",
+					".write": "auth != null && (auth.uid == $uid || auth.uid === 'backend-service-worker')",
+					"$uid": {
+						".validate": "root.child('users/'+$uid).exists()",
+						"timestamp": {
+							".validate": "newData.val() <= now"
+						}
+					}
+				}
+			}
+		}
+	}
+}

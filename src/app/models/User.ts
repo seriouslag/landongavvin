@@ -12,6 +12,7 @@ interface User {
   instagram: string;
   linkedin: string;
   youtube: string;
+  github: string;
   vanity: string;
   uid: string;
   resumeLink: string;
