@@ -1,4 +1,12 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<app-header></app-header>
-
-<router-outlet></router-outlet>
+<div
+  class="app-wrapper"
+  fxLayout="column"
+  fxFlexFill
+>
+  <app-header></app-header>
+  <div fxFlex>
+    <router-outlet></router-outlet>
+  </div>
+  <app-footer></app-footer>
+</div>

@@ -15,35 +15,31 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AppMaterialModule } from './modules/app-material.module';
-import { BlogListComponent } from './components/blog-list/blog-list.component';
-import { BlogComponent } from './components/blog/blog.component';
-import { HomeComponent } from './pages/home/home.component';
 import { HeaderComponent } from './components/header/header.component';
 import { MenuComponent } from './components/menu/menu.component';
-import { LoginComponent } from './components/login/login.component';
 import { AccountComponent } from './components/account/account.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LoginFormComponent } from './components/forms/login-form/login-form.component';
+import { LoginComponent } from './components/login/login.component';
 import { NewUserDialogComponent } from './components/dialogs/new-user-dialog/new-user-dialog.component';
 import { MatIconRegistry } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { QuestionDialogComponent } from './components/dialogs/question-dialog/question-dialog.component';
+import { AppCommonModule } from './modules/app-common.module';
+import { FooterComponent } from './components/footer/footer.component';
+import { WINDOW_PROVIDERS } from './providers/window.provider';
 
 @NgModule({
   declarations: [
     AppComponent,
     PageNotFoundComponent,
-    BlogListComponent,
-    BlogComponent,
-    HomeComponent,
     HeaderComponent,
     MenuComponent,
-    LoginComponent,
     AccountComponent,
-    LoginFormComponent,
+    LoginComponent,
     NewUserDialogComponent,
-    QuestionDialogComponent
+    QuestionDialogComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,8 +54,9 @@ import { QuestionDialogComponent } from './components/dialogs/question-dialog/qu
     FlexLayoutModule,
     AppMaterialModule, // import the Angular Material modules after Angular's BrowserModule,
     HttpClientModule,
+    AppCommonModule,
   ],
-  providers: [],
+  providers: [WINDOW_PROVIDERS],
   bootstrap: [AppComponent],
   entryComponents: [QuestionDialogComponent, NewUserDialogComponent],
 })

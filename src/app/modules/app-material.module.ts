@@ -12,7 +12,8 @@ import {
   MatSnackBarModule,
   MatStepperModule,
   MatDialogModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatToolbarModule
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 
@@ -30,7 +31,8 @@ const materialArray = [
   MatSnackBarModule,
   MatStepperModule,
   MatDialogModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatToolbarModule
 ];
 
 @NgModule({

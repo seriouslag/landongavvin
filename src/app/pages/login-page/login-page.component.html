@@ -1,0 +1,22 @@
+<div
+  fxLayout="row"
+  fxLayoutAlign="center center"
+>
+  <mat-card>
+    <app-login-form *ngIf="!user else loggedIn"></app-login-form>
+    <ng-template #loggedIn>
+      <div
+        fxLayout="column"
+        fxLayoutAlign="center center"
+      >
+        <p>You are already logged in as {{ user.displayName }}</p>
+        <button
+          mat-button
+          (click)="signOut()"
+        >
+          Change user
+        </button>
+      </div>
+    </ng-template>
+  </mat-card>
+</div>

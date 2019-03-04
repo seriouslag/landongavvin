@@ -1,3 +1,13 @@
 .blog {
   max-width: 600px;
+  padding: 2em;
+}
+
+.media {
+  border-radius: .5em
+}
+
+.mat-card-image {
+  border-radius: inherit;
+  padding-top: 5px;
 }

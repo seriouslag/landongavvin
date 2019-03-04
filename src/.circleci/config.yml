@@ -1,0 +1,28 @@
+version: 2.1
+jobs:
+  build:
+    working_directory: ~/mern-starter
+    machine:
+      image: circleci/classic:latest
+    steps:
+      - checkout
+       -run:
+        name: update-npm
+        command: 'sudo npm install -g npm@latest'
+      - run:
+        name: install-firebase
+        command: 'npm install --save-dev firebase-tools'
+      - restore_cache:
+        key: dependency-cache-{{ checksum "package.json" }}
+      - run: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_module
+      - run: npm run build
+      - run:
+          name: Deploy Master to Firebase
+          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN_PROD
+      - run:
+          name: Purging Cloudflare cache
+          command: npm run purge
