@@ -13,7 +13,7 @@ jobs:
           name: install-firebase
           command: 'npm install --save-dev firebase-tools'
       - restore_cache:
-        key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package.json" }}
       - run: npm install
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
