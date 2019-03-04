@@ -6,7 +6,7 @@ jobs:
       image: circleci/classic:latest
     steps:
       - checkout
-       -run:
+      - run:
         name: update-npm
         command: 'sudo npm install -g npm@latest'
       - run:
