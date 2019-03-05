@@ -2,9 +2,9 @@ Circleci: [![CircleCI](https://circleci.com/gh/seriouslag/landongavin.svg?style=
 
 # Landongavin
 
-Personal site built in Angular 7.
+Personal site built using [Angular 7](https://angular.io/).
 
-Uses Google's [Firebase](https://firebase.google.com/) for nosql real-time database, authorization, hosting, and storage.
+Using Google's [Firebase](https://firebase.google.com/) for nosql real-time database, authorization, hosting, and storage.
 
 Using [circleci](https://circleci.com) for CI/CD.
 
