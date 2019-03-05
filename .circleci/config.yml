@@ -1,9 +1,9 @@
 version: 2.1
 jobs:
   build:
-    working_directory: ~/mern-starter
+    # working_directory: ~/mern-starter
     machine:
-      image: circleci/classic:latest
+      image: circleci/node:latest
     steps:
       - checkout
       - run:
