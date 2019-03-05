@@ -4,7 +4,7 @@ Circleci: [![CircleCI](https://circleci.com/gh/seriouslag/landongavin.svg?style=
 
 Personal site built in Angular 7.
 
-Uses Googles Firebase for nosql real-time database, authorization, hosting, and storage.
+Uses Google's [Firebase](https://firebase.google.com/) for nosql real-time database, authorization, hosting, and storage.
 
 Using [circleci](https://circleci.com) for CI/CD.
 
