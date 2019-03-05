@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WindowService } from 'src/app/services/window.service';
+import { buildTime } from 'src/environments/buildTime';
 
 @Component({
   selector: 'app-footer',
@@ -9,8 +10,10 @@ import { WindowService } from 'src/app/services/window.service';
 export class FooterComponent {
 
   domain: string;
+  lastBuildDate: string;
 
   constructor(private windowService: WindowService) {
     this.domain = windowService.getHostname();
+    this.lastBuildDate = buildTime.LastBuildDate;
   }
 }

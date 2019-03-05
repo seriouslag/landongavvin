@@ -2,12 +2,18 @@
   fxLayout="row"
   fxLayoutAlign="space-around center"
 >
-  <mat-toolbar>
+  <mat-toolbar
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+  >
     <a
       mat-button
       routerLink="."
     >
       {{domain}}
     </a>
+    <div>
+      Last built: {{lastBuildDate}}
+    </div>
   </mat-toolbar>
 </footer>
