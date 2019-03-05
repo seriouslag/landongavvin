@@ -3,7 +3,7 @@ const https = require('https');
 require('colors');
 require('dotenv').config();
 
-const error = false;
+let error = false;
 
 const domains = [
   {
