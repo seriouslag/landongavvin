@@ -1,10 +1,28 @@
 <div
+  fxLayoutAlign="center center"
+  fxFlexFill
+  *ngIf="loading && !failed || failed || !blogs.length"
+>
+  <mat-card>
+    <mat-spinner *ngIf="loading && !failed"></mat-spinner>
+    <div *ngIf="failed">
+      Could not load blogs :(
+    </div>
+
+    <div *ngIf="!blogs.length">
+      No blogs where found :(
+    </div>
+  </mat-card>
+</div>
+
+<div
   fxLayout="column"
   fxLayoutAlign="space-around center"
   fxLayoutGap="1em"
+  *ngIf="!loading && !failed"
 >
   <app-blog
-    *ngFor="let blog of blogs | async; index as i"
+    *ngFor="let blog of blogs; index as i"
     [blog]="blog"
   >
   </app-blog>
