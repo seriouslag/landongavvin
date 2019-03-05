@@ -19,7 +19,7 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_module
-      - run: npm run build
+      - run: BUILD_TIME=$(date '+%m/%d/%Y %X') npm run build
       - run:
           name: Install Firebase functions node_module
           command: '(cd ./functions; npm install)'
