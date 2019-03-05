@@ -4,6 +4,7 @@ require('colors');
 require('dotenv').config();
 
 let error = false;
+let errorMessage = '';
 
 const domains = [
   {
@@ -22,22 +23,28 @@ const apiEmail = process.env.CLOUDFLARE_API_EMAIL;
 console.log('Clearing Cloudflare cache...'.yellow)
 
 if (!domains.length) {
-  console.log('No domains were supplied'.red);
+  const message = 'No domains were supplied; ';
+  console.log(message.red);
   error = true;
+  errorMessage += message;
 }
 
 if (!apiKey || apiKey === 'undefined') {
-  console.log('No api key was supplied'.red)
+  const message = 'No api key was supplied; ';
+  console.log(message.red);
   error = true;
+  errorMessage += message;
 }
 
 if (!apiEmail || apiEmail === 'undefined') {
-  console.log('No api email was supplied'.red)
+  const message = 'No api email was supplied; ';
+  console.log(message.red);
   error = true;
+  errorMessage += message;
 }
 
 if (error) {
-  return;
+  throw new Error(errorMessage);
 }
 
 domains.forEach((domain) => {

@@ -28,4 +28,4 @@ jobs:
           command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN_PROD
       - run:
           name: Purging Cloudflare cache
-          command: npm run purge
+          command: CLOUDFLARE_API_KEY=$CLOUDFLARE_API_KEY CLOUDFLARE_API_EMAIL=$CLOUDFLARE_API_EMAIL npm run purge
