@@ -21,6 +21,9 @@ jobs:
             - ./node_module
       - run: npm run build
       - run:
+          name: Install Firebase functions node_module
+          command: '(cd /functions; npm install)'
+      - run:
           name: Deploy Master to Firebase
           command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN_PROD
       - run:
