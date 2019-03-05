@@ -9,7 +9,7 @@
       Could not load blogs :(
     </div>
 
-    <div *ngIf="!blogs.length">
+    <div *ngIf="!loading && !failed && !blogs.length">
       No blogs where found :(
     </div>
   </mat-card>
