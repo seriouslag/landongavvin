@@ -1,32 +1,46 @@
-<button mat-raised-button
+<button
+  mat-raised-button
   [matMenuTriggerFor]="menu"
-  class="menu">
+  class="menu"
+>
   <mat-icon>more_vert</mat-icon>
 </button>
 
 <mat-menu #menu="matMenu">
-  <a mat-menu-item
-    routerLink="/home">
+  <a 
+    mat-menu-item
+    routerLink="/home"
+  >
     <mat-icon>home</mat-icon>
     <span>Home</span>
   </a>
-  <a mat-menu-item
-    routerLink="/about">
+  <a
+    mat-menu-item
+    routerLink="/about"
+  >
     <mat-icon>sentiment_neutral</mat-icon>
     <span>About</span>
   </a>
-  <button mat-menu-item
-    [matMenuTriggerFor]="projectMenu">
+  <button
+    mat-menu-item
+    [matMenuTriggerFor]="projectMenu"
+  >
     <mat-icon>extension</mat-icon>
     <span>Projects</span>
   </button>
-  
-
 </mat-menu>
 
 <mat-menu #projectMenu="matMenu">
-  <a href="https://www.seriouslag.com"
-    mat-menu-item>seriouslag.com</a>
-  <a href="https://github.com/seriouslag"
-    mat-menu-item>my github</a>
+  <a
+    href="https://www.seriouslag.com"
+    mat-menu-item
+  >
+    seriouslag.com
+  </a>
+  <a
+    href="https://github.com/seriouslag"
+    mat-menu-item
+  >
+    my github
+  </a>
 </mat-menu>

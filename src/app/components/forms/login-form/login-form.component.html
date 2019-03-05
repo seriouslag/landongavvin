@@ -1,44 +1,58 @@
-<form [formGroup]="loginForm"
+<form
+  [formGroup]="loginForm"
   novalidate
   (submit)="loginWithEmail()"
   fxLayout="column"  
 >
   <mat-form-field>
-    <input matInput
+    <input
+      matInput
       placeholder="Email"
       type="email"
       formControlName="email"
       autocomplete="email"
     >
-    <mat-hint class="errorHints"
-      *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].hasError('email') && !loginForm.controls['email'].hasError('required')">
+    <mat-hint
+      class="errorHints"
+      *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].hasError('email') && !loginForm.controls['email'].hasError('required')"
+    >
       Email is invalid.
     </mat-hint>
-    <mat-hint class="errorHints"
-      *ngIf="loginForm.controls['email'].touched  && loginForm.controls['email'].hasError('required')">An
-      email is required to login.
+    <mat-hint
+      class="errorHints"
+      *ngIf="loginForm.controls['email'].touched  && loginForm.controls['email'].hasError('required')"
+    >
+      An email is required to login.
     </mat-hint>
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput
+    <input
+      matInput
       placeholder="Password"
       type="password"
       formControlName="password"
       autocomplete="current-password"
     >
-    <mat-hint class="errorHints"
-      *ngIf="loginForm.controls['password'].touched  && loginForm.controls['password'].hasError('required')">
+    <mat-hint
+      class="errorHints"
+      *ngIf="loginForm.controls['password'].touched  && loginForm.controls['password'].hasError('required')"
+    >
       Your password is required to login.
     </mat-hint>
   </mat-form-field>
-  <div fxLayout="column"
-    fxLayoutAlign="space-around center">
-    <button mat-button
-      [disabled]="loginForm.invalid">
+  <div
+    fxLayout="column"
+    fxLayoutAlign="space-around center"
+  >
+    <button
+      mat-button
+      [disabled]="loginForm.invalid"
+    >
       Login
     </button>
-    <button mat-button
+    <button
+      mat-button
       matTooltip="Login with Google"
       type="button"
       matTooltipShowDelay="500"

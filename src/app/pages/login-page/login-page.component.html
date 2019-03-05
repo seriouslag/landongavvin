@@ -9,7 +9,9 @@
         fxLayout="column"
         fxLayoutAlign="center center"
       >
-        <p>You are already logged in as {{ user.displayName }}</p>
+        <p>
+          You are already logged in as {{ user.displayName }}
+        </p>
         <button
           mat-button
           (click)="signOut()"

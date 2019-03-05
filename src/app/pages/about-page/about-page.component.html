@@ -1,17 +1,31 @@
-<div fxFlex
+<div
+  fxFlex
   fxLayout="row"
-  fxLayoutAlign="center center">
-  <app-about *ngIf="aboutUser && waiting === false && failed === false"
-    [aboutUser]="aboutUser"></app-about>
-  <mat-card *ngIf="waiting === true || failed === true"
-    fxLayoutAlign="center center">
-    <mat-spinner *ngIf="waiting === true && failed === false"></mat-spinner>
-    <mat-card-content *ngIf="waiting === false && failed === true">
+  fxLayoutAlign="center center"
+>
+  <app-about
+    *ngIf="aboutUser && waiting === false && failed === false"
+    [aboutUser]="aboutUser"
+  ></app-about>
+  <mat-card
+    *ngIf="waiting === true || failed === true"
+    fxLayoutAlign="center center"
+  >
+    <mat-spinner
+      *ngIf="waiting === true && failed === false"
+    ></mat-spinner>
+    <mat-card-content
+      *ngIf="waiting === false && failed === true"
+    >
       User was not found.
       <br>
-      <button mat-button
+      <button
+        mat-button
         routerLink="/home"
-        color="primary">Home</button>
+        color="primary"
+      >
+        Home
+      </button>
     </mat-card-content>
   </mat-card>
 </div>

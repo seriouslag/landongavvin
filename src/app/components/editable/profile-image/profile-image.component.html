@@ -1,10 +1,16 @@
-<img mat-card-avatar
+<img
+  mat-card-avatar
   class="profile_image"
   src="{{src}}"
-  *ngIf="editMode !== true">
+  *ngIf="editMode !== true"
+>
 
-<div *ngIf="editMode === true">
-  <img mat-card-avatar
+<div 
+  *ngIf="editMode === true"
+>
+  <img
+    mat-card-avatar
     class="profile_image"
-    src="{{src}}">
+    src="{{src}}"
+  >
 </div>

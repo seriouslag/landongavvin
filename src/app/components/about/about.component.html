@@ -30,7 +30,8 @@
         (notify)="updateUserProperties('job', $event)"
         (enter)="submit()"></app-text-input>
       <span *ngIf="aboutUser.company"> @ </span>
-      <app-text-input #company
+      <app-text-input
+        #company
         [editMode]="editMode"
         [type]="'text'"
         [text]="aboutUser.company"
@@ -38,19 +39,27 @@
         [maxlength]="20"
         (value)="company"
         (notify)="updateUserProperties('company', $event)"
-        (enter)="submit()"></app-text-input>
+        (enter)="submit()"
+      ></app-text-input>
 
     </mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
-    <div fxLayout="row"
-      fxLayoutGap="10px">
+    <div
+      fxLayout="row"
+      fxLayoutGap="10px"
+    >
       <div fxFlex>
-        <span *ngIf="editMode === false">Bio:</span>
-        <p *ngIf="aboutUser.bio"
-          class="bio">
-          <app-text-input #bio
+        <span *ngIf="editMode === false">
+          Bio:
+        </span>
+        <p
+          *ngIf="aboutUser.bio"
+          class="bio"
+        >
+          <app-text-input
+            #bio
             [editMode]="editMode"
             [type]="'textarea'"
             [text]="aboutUser.bio"
@@ -58,10 +67,12 @@
             [maxlength]="280"
             (value)="bio"
             (notify)="updateUserProperties('bio', $event)"
-            (enter)="submit()"></app-text-input>
+            (enter)="submit()"
+          ></app-text-input>
         </p>
         <p *ngIf="!aboutUser.bio">
-          <app-text-input #bio
+          <app-text-input
+            #bio
             [editMode]="editMode"
             [type]="'textarea'"
             [text]="aboutUser.fname + ' has not entered a bio yet :('"
@@ -69,7 +80,8 @@
             [maxlength]="200"
             (value)="bio"
             (notify)="updateUserProperties('bio', $event)"
-            (enter)="submit()"> </app-text-input>
+            (enter)="submit()"
+          ></app-text-input>
         </p>
       </div>
 
@@ -85,14 +97,17 @@
 
   </mat-card-content>
   <mat-card-actions>
-    <div fxLayout="row"
-      fxLayoutAlign="space-around center">
+    <div
+      fxLayout="row"
+      fxLayoutAlign="space-around center"
+    >
       <app-social-link
         *ngFor="let enabledLink of enabledSocialLinkList"
         [editMode]="editMode"
         [type]="enabledLink"
         [link]="aboutUser[enabledLink]"
-        (notify)="updateUserProperties(enabledLink, $event)"></app-social-link>
+        (notify)="updateUserProperties(enabledLink, $event)"
+      ></app-social-link>
     </div>
     <div *ngIf="editMode === true">
       Click to add or edit social links

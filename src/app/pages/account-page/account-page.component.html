@@ -1,23 +1,29 @@
-<div fxFlexFill
+<div
+  fxFlexFill
   fxLayout="column"
-  fxLayoutAlign="center center">
+  fxLayoutAlign="center center"
+>
   <mat-card>
     <mat-card-header>
       <mat-card-title>Account Settings</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <form fxLayout="column"
+      <form
+        fxLayout="column"
         fxLayoutGap="10px"
         [formGroup]="settingsForm"
         novalidate
         (submit)="saveUserInfo()"
-        *ngIf="lgUser && user">
+        *ngIf="lgUser && user"
+      >
         <mat-form-field>
-          <input matInput
+          <input
+            matInput
             placeholder="First Name"
             type="text"
             formControlName="firstname"
-            value="{{lgUser?.fname}}">
+            value="{{lgUser?.fname}}"
+          >
           <mat-hint
             *ngIf="settingsForm.controls['firstname'].hasError('minlength') && settingsForm.controls['firstname'].touched"
             class="errorHints">
@@ -25,11 +31,13 @@
           </mat-hint>
         </mat-form-field>
         <mat-form-field>
-          <input matInput
+          <input
+            matInput
             placeholder="Last Name"
             type="text"
             formControlName="lastname"
-            value="{{lgUser?.lname}}">
+            value="{{lgUser?.lname}}"
+          >
           <mat-hint
             *ngIf="settingsForm.controls['lastname'].hasError('minlength') && settingsForm.controls['lastname'].touched"
             class="errorHints">
@@ -38,53 +46,73 @@
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput
+          <input
+            matInput
             placeholder="Vanity"
             type="text"
             formControlName="vanity"
-            value="{{lgUser?.vanity}}">
-          <mat-hint *ngIf="settingsForm.controls['vanity'].hasError('minlength')"
-            class="errorHints">
+            value="{{lgUser?.vanity}}"
+          >
+          <mat-hint
+            *ngIf="settingsForm.controls['vanity'].hasError('minlength')"
+            class="errorHints"
+          >
             Vanity must be longer than 3 characters in length.
           </mat-hint>
-          <mat-hint *ngIf="settingsForm.controls['vanity'].hasError('maxlength')"
-            class="errorHints">
+          <mat-hint
+            *ngIf="settingsForm.controls['vanity'].hasError('maxlength')"
+            class="errorHints"
+          >
             Vanity must be shorter than 30 characters in length.
           </mat-hint>
-          <mat-hint *ngIf="settingsForm.controls['vanity'].hasError('vanityInUse')"
-            class="errorHints">
+          <mat-hint
+            *ngIf="settingsForm.controls['vanity'].hasError('vanityInUse')"
+            class="errorHints"
+          >
             This vanity is already in use.
           </mat-hint>
-          <mat-hint *ngIf="settingsForm.controls['vanity'].hasError('vanity') && !settingsForm.controls['vanity'].hasError('minlength') && !settingsForm.controls['vanity'].hasError('vanityInUse')
+          <mat-hint
+            *ngIf="settingsForm.controls['vanity'].hasError('vanity') && !settingsForm.controls['vanity'].hasError('minlength') && !settingsForm.controls['vanity'].hasError('vanityInUse')
             && !settingsForm.controls['vanity'].hasError('maxlength')"
-            class="errorHints">
+            class="errorHints"
+          >
             Vanity must only contain letters and numbers.
           </mat-hint>
           <mat-hint
             *ngIf="!settingsForm.controls['vanity'].hasError('vanity') && !settingsForm.controls['vanity'].hasError('minlength') && !settingsForm.controls['vanity'].hasError('vanityInUse')
             && !settingsForm.controls['vanity'].hasError('maxlength') && settingsForm.controls['vanity'].value !== lgUser.vanity"
-            class="vanity">
+            class="vanity"
+          >
             This vanity is available to use.
           </mat-hint>
           <mat-hint
             *ngIf="settingsForm.controls['vanity'].value === lgUser?.vanity && settingsForm.controls['vanity'].touched"
-            class="vanity">
+            class="vanity"
+          >
             Your current vanity.
           </mat-hint>
         </mat-form-field>
 
         <button mat-button
           type="button"
-          (click)="resetPassword()">Reset Password</button>
-        <mat-card-actions fxLayout="row"
-          fxLayoutAlign="center center">
-          <button mat-button
+          (click)="resetPassword()"
+        >
+          Reset Password
+        </button>
+        <mat-card-actions
+          fxLayout="row"
+          fxLayoutAlign="center center"
+        >
+          <button
+            mat-button
             matTooltip="Save"
             [matTooltipShowDelay]="500"
             type="submit"
             [disabled]="(settingsForm.controls['firstname'].value === lgUser.fname || settingsForm.controls['firstname'].value === '')
                   && (settingsForm.controls['lastname'].value === lgUser.lname || settingsForm.controls['lastname'].value === '')
-                  && (settingsForm.controls['vanity'].value === lgUser.vanity || settingsForm.controls['vanity'].value === '') || settingsForm.invalid">Save
+                  && (settingsForm.controls['vanity'].value === lgUser.vanity || settingsForm.controls['vanity'].value === '') || settingsForm.invalid"
+          >
+            Save
           </button>
         </mat-card-actions>
 

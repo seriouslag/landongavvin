@@ -1,6 +1,8 @@
 <mat-accordion #login_component>
-  <mat-expansion-panel (opened)="loginOpened()"
-    [expanded]="closedLogin">
+  <mat-expansion-panel
+    (opened)="loginOpened()"
+    [expanded]="closedLogin"
+  >
     <mat-expansion-panel-header>
       <mat-panel-title>
         {{title}}
@@ -10,95 +12,130 @@
       <app-login-form></app-login-form>
     </div>
 
-    <form fxLayout="column"
+    <form
+      fxLayout="column"
       fxLayoutGap="10px"
       [formGroup]="accountForm"
       *ngIf="create"
       novalidate
-      (submit)="createUserLogin()">
+      (submit)="createUserLogin()"
+    >
       <mat-form-field>
-        <input matInput
+        <input
+          matInput
           placeholder="First Name"
           type="text"
           formControlName="firstname"
           required
-          autocomplete="fname">
+          autocomplete="fname"
+        >
         <mat-hint
           *ngIf="accountForm.controls['firstname'].hasError('required') && accountForm.controls['firstname'].touched"
-          class="errorHints">A first name is required.
+          class="errorHints"
+        >
+          A first name is required.
         </mat-hint>
         <mat-hint
           *ngIf="accountForm.controls['firstname'].hasError('minlength') && accountForm.controls['firstname'].touched"
-          class="errorHints">First Name must be longer than 2 characters.
+          class="errorHints"
+        >
+          First Name must be longer than 2 characters.
         </mat-hint>
       </mat-form-field>
       <mat-form-field>
-        <input matInput
+        <input
+          matInput
           placeholder="Last Name"
           type="text"
           formControlName="lastname"
           required
-          autocomplete="lname">
+          autocomplete="lname"
+        >
         <mat-hint
           *ngIf="accountForm.controls['lastname'].hasError('required') && accountForm.controls['lastname'].touched"
-          class="errorHints">A last name is required.
+          class="errorHints"
+        >
+          A last name is required.
         </mat-hint>
         <mat-hint
           *ngIf="accountForm.controls['lastname'].hasError('minlength') && accountForm.controls['lastname'].touched"
-          class="errorHints">Last Name must be longer than 2 characters.
+          class="errorHints"
+        >
+          Last Name must be longer than 2 characters.
         </mat-hint>
       </mat-form-field>
-      <div fxLayout="column"
+      <div
+        fxLayout="column"
         fxLayoutGap="10px"
-        formGroupName="matchingEmail">
+        formGroupName="matchingEmail"
+      >
         <mat-form-field>
-          <input matInput
+          <input
+            matInput
             placeholder="Email"
             type="email"
             formControlName="email"
             required
-            autocomplete="email">
+            autocomplete="email"
+          >
           <mat-hint
             *ngIf="matchingEmail.controls['email'].hasError('required') && matchingEmail.controls['email'].touched && !matchingEmail.controls['email'].hasError('email')"
-            class="errorHints">An email is required.
+            class="errorHints"
+          >
+            An email is required.
           </mat-hint>
-          <mat-hint *ngIf="matchingEmail.controls['email'].touched && matchingEmail.controls['email'].hasError('email')"
-            class="errorHints">This is not a valid email.
+          <mat-hint
+            *ngIf="matchingEmail.controls['email'].touched && matchingEmail.controls['email'].hasError('email')"
+            class="errorHints"
+          >
+            This is not a valid email.
           </mat-hint>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput
+          <input
+            matInput
             placeholder="Confirm Email"
             type="email"
             formControlName="cemail"
             required
-            autocomplete="email">
+            autocomplete="email"
+          >
 
           <mat-hint
             *ngIf="matchingEmail.controls['cemail'].hasError('required') && matchingEmail.controls['cemail'].touched"
-            class="errorHints">Must confirm email
+            class="errorHints"
+          >
+            Must confirm email
           </mat-hint>
           <mat-hint
             *ngIf="!matchingEmail.controls['cemail'].hasError('required') && matchingEmail.controls['email'].touched && accountForm.controls['matchingEmail'].hasError('mismatch')"
-            class="errorHints">Emails must match
+            class="errorHints"
+          >
+            Emails must match
           </mat-hint>
 
         </mat-form-field>
       </div>
-      <div fxLayout="column"
+      <div
+        fxLayout="column"
         fxLayoutGap="10px"
-        formGroupName="matchingPassword">
+        formGroupName="matchingPassword"
+      >
         <mat-form-field>
-          <input matInput
+          <input
+            matInput
             placeholder="Password"
             type="password"
             formControlName="password"
             required
-            autocomplete="current-password">
+            autocomplete="current-password"
+          >
           <mat-hint
             *ngIf="matchingPassword.controls['password'].hasError('required') && matchingPassword.controls['password'].touched"
-            class="errorHints">A password is required.
+            class="errorHints"
+          >
+            A password is required.
           </mat-hint>
           <!--<mat-hint
             *ngIf="!matchingPassword.controls['password'].hasError('minlength') && !matchingPassword.controls['password'].hasError('required') && matchingPassword.controls['password'].touched && matchingPassword.controls['password'].hasError('pw')"
@@ -106,71 +143,100 @@
           </mat-hint>-->
           <mat-hint
             *ngIf="!matchingPassword.controls['password'].hasError('minlength') && !matchingPassword.controls['password'].hasError('maxlength') && !matchingPassword.controls['password'].hasError('required') && matchingPassword.controls['password'].touched && matchingPassword.controls['password'].hasError('pw')"
-            class="errorHints">This is not a valid password.
+            class="errorHints"
+          >
+            This is not a valid password.
           </mat-hint>
           <mat-hint
             *ngIf="matchingPassword.controls['password'].hasError('maxlength') && matchingPassword.controls['password'].touched && !matchingPassword.controls['password'].hasError('required')"
-            class="errorHints">The password must be at least 8 characters long.
+            class="errorHints"
+          >
+            The password must be at least 8 characters long.
           </mat-hint>
           <mat-hint
             *ngIf="matchingPassword.controls['password'].hasError('minlength') && matchingPassword.controls['password'].touched && !matchingPassword.controls['password'].hasError('required')"
-            class="errorHints">The password must be at least 8 characters long.
+            class="errorHints"
+          >
+            The password must be at least 8 characters long.
           </mat-hint>
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput
+          <input
+            matInput
             placeholder="Confirm Password"
             type="password"
             formControlName="cpassword"
             required
-            autocomplete="current-password">
+            autocomplete="current-password"
+          >
           <mat-hint
             *ngIf="matchingPassword.controls['cpassword'].hasError('required') && matchingPassword.controls['cpassword'].touched"
-            class="errorHints">This field is required.
+            class="errorHints"
+          >
+            This field is required.
           </mat-hint>
           <mat-hint
             *ngIf="matchingPassword.controls['password'].touched && accountForm.controls['matchingPassword'].hasError('mismatch') && !matchingPassword.controls['cpassword'].hasError('required')"
-            class="errorHints">Both passwords must match.
+            class="errorHints"
+          >
+            Both passwords must match.
           </mat-hint>
         </mat-form-field>
       </div>
-      <div fxLayout="row"
-        class="required">
+      <div
+        fxLayout="row"
+        class="required"
+      >
         <div fxFlex></div>
         <div>*all fields are required</div>
       </div>
 
       <mat-action-row>
         <div fxLayout="row">
-          <button mat-button
+          <button
+            mat-button
             type="button"
             (click)="toLogin()"
             matTooltip="Back to Login"
-            [matTooltipShowDelay]="500">Back</button>
-          <button mat-button
+            [matTooltipShowDelay]="500"
+          >
+            Back
+          </button>
+          <button
+            mat-button
             matTooltip="Create account"
             [matTooltipShowDelay]="500"
             type="submit"
-            [disabled]="accountForm.invalid">Create
+            [disabled]="accountForm.invalid"
+          >
+            Create
           </button>
         </div>
       </mat-action-row>
     </form>
 
     <mat-action-row *ngIf="!create">
-      <div fxLayout="row"
-        fxFlexFill>
-        <button mat-button
+      <div
+        fxLayout="row"
+        fxFlexFill
+      >
+        <button
+          mat-button
           (click)="closeLogin()"
           matTooltip="Cancel Login"
-          [matTooltipShowDelay]="500">Cancel</button>
+          [matTooltipShowDelay]="500"
+        >
+          Cancel
+        </button>
 
-        <button (click)="toCreateAccount()"
+        <button
+          (click)="toCreateAccount()"
           class="create_button"
           mat-button
           matTooltip="Create an account"
-          [matTooltipShowDelay]="500">
+          [matTooltipShowDelay]="500"
+        >
           Create
         </button>
       </div>

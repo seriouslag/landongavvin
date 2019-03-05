@@ -1,21 +1,33 @@
-<h1 mat-dialog-title
-  *ngIf="!customText">Are you sure you want to do this?</h1>
-<h1 mat-dialog-title
-  *ngIf="customText">{{customText}}</h1>
-<button mat-button
+<h1
+  mat-dialog-title
+  *ngIf="!customText"
+>
+  Are you sure you want to do this?
+</h1>
+<h1
+  mat-dialog-title
+  *ngIf="customText"
+>
+  {{customText}}
+</h1>
+<button
+  mat-button
   matTooltip="Cancel"
   [matTooltipShowDelay]="500"
   color="primary"
   (click)="cancel()"
-  class="cancel">
+  class="cancel"
+>
   <mat-icon>close</mat-icon>
   <span *ngIf="showButtonText">Cancel</span>
 </button>
-<button mat-button
+<button
+  mat-button
   matTooltip="Confirm"
   [matTooltipShowDelay]="500"
   (click)="confirm()"
-  class="confirm">
+  class="confirm"
+>
   <mat-icon>check</mat-icon>
   <span *ngIf="showButtonText">Confirm</span>
 </button>

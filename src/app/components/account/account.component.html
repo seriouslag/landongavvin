@@ -2,16 +2,53 @@
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <div *ngIf="user" fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="10px" class="account_info">
-          <img src="{{user.photoURL}}" *ngIf="user.photoURL"><div *ngIf="user.displayName">{{user.displayName}}</div>
-          <div *ngIf="!user.displayName">{{user.email}}</div>
+        <div
+          *ngIf="user"
+          fxLayout="row"
+          fxLayoutAlign="space-around center"
+          fxLayoutGap="10px"
+          class="account_info"
+        >
+          <img
+            src="{{user.photoURL}}"
+            *ngIf="user.photoURL">
+              <div
+                *ngIf="user.displayName"
+              >
+                {{user.displayName}}
+              </div>
+          <div
+            *ngIf="!user.displayName"
+          >
+            {{user.email}}
+          </div>
         </div>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <div fxLayout="column" fxLayoutAlign="start start">
-      <a mat-button *ngIf="lgUser?.vanity" routerLink="/about/{{lgUser?.vanity}}">Profile</a>
-      <a mat-button *ngIf="lgUser" routerLink="/account">Settings</a>
-      <button mat-button (click)="logout()">Logout</button>
+    <div
+      fxLayout="column"
+      fxLayoutAlign="start start"
+    >
+      <a
+        mat-button
+        *ngIf="lgUser?.vanity"
+        routerLink="/about/{{lgUser?.vanity}}"
+      >
+        Profile
+      </a>
+      <a
+        mat-button
+        *ngIf="lgUser"
+        routerLink="/account"
+      >
+        Settings
+      </a>
+      <button
+        mat-button
+        (click)="logout()"
+      >
+        Logout
+      </button>
     </div>
   </mat-expansion-panel>
 </mat-accordion>

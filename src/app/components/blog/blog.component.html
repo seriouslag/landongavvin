@@ -8,19 +8,26 @@
     </mat-card-subtitle>
   </mat-card-header>
   <div class="media">
-    <div class="videoContainer"
-      *ngIf="blog.hasVideo">
-      <video poster="{{blog.image}}"
+    <div
+      class="videoContainer"
+      *ngIf="blog.hasVideo"
+    >
+      <video
+        poster="{{blog.image}}"
         preload="auto"
         muted
         loop
         autoplay="false"
-        class="video">
-        <source src="{{blog.image}}"
-          type="video/{{blog.videoType}}">
+        class="video"
+      >
+        <source
+          src="{{blog.image}}"
+          type="video/{{blog.videoType}}"
+        >
       </video>
     </div>
-    <img src="{{blog.image}}"
+    <img
+      src="{{blog.image}}"
       mat-card-image
       *ngIf="!blog.hasVideo && blog.image.length>0"
       [ngClass]="{'blogImageLarge': cardSize === 3, 'blogImageMed': cardSize === 2, 'blogImageSmall': cardSize === 1, 'blogImageXSmall': cardSize === 0}"
