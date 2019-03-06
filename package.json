@@ -4,11 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "node ./replace.build.js && ng build --prod",
+    "build": "node ./utils/replace.build.js && ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy": "node ./replace.build.js && ng build --prod && firebase deploy && node ./utils/purgeCache.js",
+    "deploy": "node ./utils/replace.build.js && ng build --prod && firebase deploy && node ./utils/purgeCache.js",
     "purge": "node ./utils/purgeCache.js"
   },
   "private": true,

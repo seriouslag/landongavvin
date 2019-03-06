@@ -8,19 +8,20 @@ console.log(date);
 const buildDate = `'{${date}}'`;
 
 const fileLocations = [
-  'src/environments/buildTIme.ts',
+  'src/environments/buildTime.ts',
 ];
 
 function updateFileWithDate(fileLocation) {
   const options = {
     files: fileLocation,
-    from: /'{.*}'/,
+    from: /'{.*}'/g,
     to: buildDate,
     allowEmptyPaths: false,
   };
 
   try {
     let changedFiles = replace.sync(options);
+
     console.log('Build date set to: ' + buildDate);
   }
   catch (error) {
