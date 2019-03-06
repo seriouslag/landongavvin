@@ -1,11 +1,10 @@
+require('colors');
 const replace = require('replace-in-file');
-const d = new Date().setSeconds(new Date().getSeconds() - (new Date().getTimezoneOffset() * 60));
-const date = new Date(d).toISOString()
-  .replace(/T/, ' ')      // replace T with a space
-  .replace(/\..+/, '')     // delete the dot and everything after
-  .replace(/-/g,'/');
-console.log(date);
-const buildDate = `'{${date}}'`;
+
+const options = { timeZone: "America/New_York" };
+const estTime = new Date();
+
+const buildDate = `'{${estTime.toLocaleString("en-US", options)}}'`;
 
 const fileLocations = [
   'src/environments/buildTime.ts',
@@ -22,10 +21,10 @@ function updateFileWithDate(fileLocation) {
   try {
     let changedFiles = replace.sync(options);
 
-    console.log('Build date set to: ' + buildDate);
+    console.log(`Build date set to: ${buildDate}`.green);
   }
   catch (error) {
-    console.error('Error occurred:', error);
+    console.error(`Error occurred: ${error}`.red);
   }
 }
 
