@@ -6,9 +6,6 @@ jobs:
       - image: circleci/node:latest
     steps:
       - checkout
-      - run:
-          name: update-npm
-          command: 'sudo npm install -g npm@latest'
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run: npm install
@@ -17,9 +14,6 @@ jobs:
           paths:
             - ./node_module
       - run: npm run build
-      - run:
-          name: Install Firebase functions node_module
-          command: '(cd ./functions; npm install)'
       - run:
           name: Deploy Master to Firebase
           command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN_PROD
