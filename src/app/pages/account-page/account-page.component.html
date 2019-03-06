@@ -14,7 +14,7 @@
         [formGroup]="settingsForm"
         novalidate
         (submit)="saveUserInfo()"
-        *ngIf="lgUser && user"
+        *ngIf="user"
       >
         <mat-form-field>
           <input
@@ -22,7 +22,7 @@
             placeholder="First Name"
             type="text"
             formControlName="firstname"
-            value="{{lgUser?.fname}}"
+            value="{{user?.fname}}"
           >
           <mat-hint
             *ngIf="settingsForm.controls['firstname'].hasError('minlength') && settingsForm.controls['firstname'].touched"
@@ -36,7 +36,7 @@
             placeholder="Last Name"
             type="text"
             formControlName="lastname"
-            value="{{lgUser?.lname}}"
+            value="{{user?.lname}}"
           >
           <mat-hint
             *ngIf="settingsForm.controls['lastname'].hasError('minlength') && settingsForm.controls['lastname'].touched"
@@ -51,7 +51,7 @@
             placeholder="Vanity"
             type="text"
             formControlName="vanity"
-            value="{{lgUser?.vanity}}"
+            value="{{user?.vanity}}"
           >
           <mat-hint
             *ngIf="settingsForm.controls['vanity'].hasError('minlength')"
@@ -80,13 +80,13 @@
           </mat-hint>
           <mat-hint
             *ngIf="!settingsForm.controls['vanity'].hasError('vanity') && !settingsForm.controls['vanity'].hasError('minlength') && !settingsForm.controls['vanity'].hasError('vanityInUse')
-            && !settingsForm.controls['vanity'].hasError('maxlength') && settingsForm.controls['vanity'].value !== lgUser.vanity"
+            && !settingsForm.controls['vanity'].hasError('maxlength') && settingsForm.controls['vanity'].value !== user.vanity"
             class="vanity"
           >
             This vanity is available to use.
           </mat-hint>
           <mat-hint
-            *ngIf="settingsForm.controls['vanity'].value === lgUser?.vanity && settingsForm.controls['vanity'].touched"
+            *ngIf="settingsForm.controls['vanity'].value === user?.vanity && settingsForm.controls['vanity'].touched"
             class="vanity"
           >
             Your current vanity.
@@ -108,9 +108,9 @@
             matTooltip="Save"
             [matTooltipShowDelay]="500"
             type="submit"
-            [disabled]="(settingsForm.controls['firstname'].value === lgUser.fname || settingsForm.controls['firstname'].value === '')
-                  && (settingsForm.controls['lastname'].value === lgUser.lname || settingsForm.controls['lastname'].value === '')
-                  && (settingsForm.controls['vanity'].value === lgUser.vanity || settingsForm.controls['vanity'].value === '') || settingsForm.invalid"
+            [disabled]="(settingsForm.controls['firstname'].value === user.fname || settingsForm.controls['firstname'].value === '')
+                  && (settingsForm.controls['lastname'].value === user.lname || settingsForm.controls['lastname'].value === '')
+                  && (settingsForm.controls['vanity'].value === user.vanity || settingsForm.controls['vanity'].value === '') || settingsForm.invalid"
           >
             Save
           </button>

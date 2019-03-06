@@ -10,12 +10,12 @@
           class="account_info"
         >
           <img
-            src="{{user.photoURL}}"
-            *ngIf="user.photoURL">
+            src="{{fbAuthUser.photoURL}}"
+            *ngIf="fbAuthUser.photoURL">
               <div
-                *ngIf="user.displayName"
+                *ngIf="fbAuthUser.displayName"
               >
-                {{user.displayName}}
+                {{fbAuthUser.displayName}}
               </div>
           <div
             *ngIf="!user.displayName"
@@ -31,14 +31,14 @@
     >
       <a
         mat-button
-        *ngIf="lgUser?.vanity"
-        routerLink="/about/{{lgUser?.vanity}}"
+        *ngIf="user?.vanity"
+        routerLink="/about/{{user?.vanity}}"
       >
         Profile
       </a>
       <a
         mat-button
-        *ngIf="lgUser"
+        *ngIf="user"
         routerLink="/account"
       >
         Settings

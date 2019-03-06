@@ -17,10 +17,8 @@ import { QuestionDialogComponent } from 'src/app/components/dialogs/question-dia
 export class AccountPageComponent implements OnInit, OnDestroy {
 
   private userSubscription: Subscription;
-  private lgUserSubscription: Subscription;
 
-  user: firebase.User;
-  lgUser: User;
+  user: User;
 
   confirmDialog: MatDialogRef<QuestionDialogComponent>;
 
@@ -32,7 +30,7 @@ export class AccountPageComponent implements OnInit, OnDestroy {
   });
 
   constructor(private firebaseService: FirebaseService, private dialogService: DialogService, private snackBar: MatSnackBar) {
-    this.lgUser = {
+    this.user = {
       fname: 'First', lname: 'Last', email: '',
       bio: '', job: '', company: '',
       twitch: '', youtube: '', facebook: '',
@@ -52,25 +50,18 @@ export class AccountPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userSubscription = this.firebaseService.user.subscribe(user => {
+    this.userSubscription = this.firebaseService.user.subscribe((user) => {
       this.user = user;
-      if (user != null) {
-        this.lgUserSubscription = this.firebaseService.getUserByUID(user.uid).subscribe(lgUser => {
-          this.lgUser = lgUser;
-          this.settingsForm.controls.firstname.patchValue(lgUser.fname);
-          this.settingsForm.controls.lastname.patchValue(lgUser.lname);
-          this.settingsForm.controls.vanity.patchValue(lgUser.vanity);
-        });
-      } else {
-        this.lgUser = null;
+      if (!user) {
+        user = {} as User;
       }
+      this.settingsForm.controls.firstname.patchValue(user.fname || '');
+      this.settingsForm.controls.lastname.patchValue(user.lname || '');
+      this.settingsForm.controls.vanity.patchValue(user.vanity || user.uid ? user.uid.toLowerCase() : '');
     });
   }
 
   ngOnDestroy(): void {
-    if (this.lgUserSubscription) {
-      this.lgUserSubscription.unsubscribe();
-    }
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }
@@ -88,7 +79,7 @@ export class AccountPageComponent implements OnInit, OnDestroy {
         take(1)
       ).subscribe(vanities => {
         for (const vanity of vanities) {
-          if (vanity.key === vanityCheck && vanityCheck !== this.lgUser.vanity) {
+          if (vanity.key === vanityCheck && vanityCheck !== this.user.vanity) {
             return resolve({ vanityInUse: true });
           }
         }
@@ -123,13 +114,13 @@ export class AccountPageComponent implements OnInit, OnDestroy {
     const update: UserUpdateRequest = {
       fname: '', lname: ''
     };
-    if (this.lgUser.fname !== this.settingsForm.controls.firstname.value) {
+    if (this.user.fname !== this.settingsForm.controls.firstname.value) {
       update.fname = this.settingsForm.controls.firstname.value;
     }
-    if (this.lgUser.lname !== this.settingsForm.controls.lastname.value) {
+    if (this.user.lname !== this.settingsForm.controls.lastname.value) {
       update.lname = this.settingsForm.controls.lastname.value;
     }
-    if (this.lgUser.vanity !== this.settingsForm.controls.vanity.value) {
+    if (this.user.vanity !== this.settingsForm.controls.vanity.value) {
       this.firebaseService.setUserVanity(this.settingsForm.controls.vanity.value);
     }
 

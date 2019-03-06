@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 import { Blog } from '../models/Blog';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { take, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
@@ -13,12 +13,18 @@ import { AngularFireStorage } from '@angular/fire/storage';
 @Injectable({
   providedIn: 'root'
 })
-export class FirebaseService {
-  public user: Observable<firebase.User>;
+export class FirebaseService implements OnDestroy {
+
+  public fbAuthUser: Observable<firebase.User>;
   public blogs: Observable<Blog[]>;
+
+  private fbAuthUserSubscription: Subscription;
+  public user = new BehaviorSubject<User>(null);
 
   private blogsRef: AngularFireList<Blog>;
   private blogListenerSet = false;
+
+  private serviceUserReference: User;
 
   constructor(private db: AngularFireDatabase,
               private auth: AngularFireAuth,
@@ -27,7 +33,19 @@ export class FirebaseService {
     console.log('in firebase service constructor');
     this.blogsRef = this.db.list<Blog>('/blog');
 
-    this.user = auth.authState;
+    this.fbAuthUser = auth.authState;
+
+    this.fbAuthUserSubscription = auth.authState.subscribe((fbAuthUser) => {
+      if (!fbAuthUser) {
+        this.user.next(null);
+        this.serviceUserReference = null;
+        return;
+      }
+      this.getUserByUID(fbAuthUser.uid).pipe(take(1)).subscribe((user) => {
+        this.serviceUserReference = user;
+        this.user.next(user);
+      });
+    });
   }
 
   public async updateImageCacheControl(path: string, fileName: string) {
@@ -108,7 +126,7 @@ export class FirebaseService {
       default:
         message = 'An unknown error occurred.';
     }
-
+    this.snackBar.open(message, 'OK', { duration: 1000 });
     console.log(message, error);
   }
 
@@ -148,83 +166,81 @@ export class FirebaseService {
   }
 
   public async loginWithGoogleProvider(): Promise<void> {
-    const loginResponse: firebase.auth.UserCredential = await this.auth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-    const fireabaseUser: firebase.User = loginResponse.user;
+      try {
+        const loginResponse = await this.auth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+        const fireabaseUser: firebase.User = loginResponse.user;
+        const user: User = await this.db.object<User>('/users/' + fireabaseUser.uid).valueChanges().pipe(
+          take(1)
+        ).toPromise();
 
-    try {
-      const user: User = await this.db.object<User>('/users/' + fireabaseUser.uid).valueChanges().pipe(
-        take(1)
-      ).toPromise();
+        if (user !== null) {
+          console.log('logged in via Google provider.');
+          return;
+        }
 
-      if (user !== null) {
-        console.log('logged in via Google provider.');
-        return;
+        console.log('Logged in via Google provider; Now creating user in DB;');
+
+        const tempUser: User = {} as User;
+        tempUser.dateCreated = Date.now().toString();
+        tempUser.email = user.email || '';
+
+        if (user.uid) {
+          tempUser.uid = user.uid.toLowerCase();
+          tempUser.vanity = user.uid.toLowerCase();
+          this.setUserVanity(user.uid.toLowerCase());
+        }
+
+        if (fireabaseUser.displayName) {
+          const firstName = fireabaseUser.displayName.split(' ').slice(0, -1).join(' ');
+          const lastName = fireabaseUser.displayName.split(' ').slice(-1).join(' ');
+          tempUser.fname = firstName;
+          tempUser.lname = lastName;
+        }
+
+        this.saveUserToDB({
+          email: tempUser.email, fname: tempUser.fname, lname: tempUser.lname,
+          bio: '', job: '', company: '', twitter: '',
+          facebook: '', instagram: '', twitch: '', youtube: '',
+          google: '', uid: tempUser.uid, linkedin: '', resumeLink: '',
+          github: '', vanity: tempUser.uid, profileImage: false,
+          dateCreated: tempUser.dateCreated, image: '', isVerified: false
+        } as User);
+      } catch (e) {
+        let message: string;
+        switch (e.code) {
+          case 'auth/account-exists-with-different-credential':
+            message = 'This account already exists with diffent credentials, please try signing in.';
+            break;
+          case 'auth/auth-domain-config-required':
+            message = 'System error. :(';
+            break;
+          case 'auth/cancelled-popup-request':
+            message = 'Sign in popup was canceled :(';
+            break;
+          case 'auth/operation-not-allowed':
+            message = 'This method of signing in is currently disabled, please try another method.';
+            break;
+          case 'auth/operation-not-supported-in-this-environment':
+            message = 'Must be https and running in registered domain.';
+            break;
+          case 'auth/popup-blocked':
+            message = 'Signin popup was blocked';
+            break;
+          case 'auth/popup-closed-by-user':
+            message = 'Sign in popup was canceled :(';
+            break;
+          case 'auth/unauthorized-domain':
+            message = 'This domain is not authorized for this signin method.';
+            break;
+          default:
+            message = 'Cannot process, unknown error';
+        }
+        this.snackBar.open(message, 'OK', { duration: 2000 });
       }
-
-      console.log('Logged in via Google provider; Now creating user in DB;');
-
-      const tempUser: User = {} as User;
-      tempUser.dateCreated = Date.now().toString();
-      tempUser.email = user.email || '';
-
-      if (user.uid) {
-        tempUser.uid = user.uid.toLowerCase();
-        tempUser.vanity = user.uid.toLowerCase();
-        this.setUserVanity(user.uid.toLowerCase());
-      }
-
-      if (fireabaseUser.displayName) {
-        const firstName = fireabaseUser.displayName.split(' ').slice(0, -1).join(' ');
-        const lastName = fireabaseUser.displayName.split(' ').slice(-1).join(' ');
-        tempUser.fname = firstName;
-        tempUser.lname = lastName;
-      }
-
-      this.saveUserToDB({
-        email: tempUser.email, fname: tempUser.fname, lname: tempUser.lname,
-        bio: '', job: '', company: '', twitter: '',
-        facebook: '', instagram: '', twitch: '', youtube: '',
-        google: '', uid: tempUser.uid, linkedin: '', resumeLink: '',
-        github: '', vanity: tempUser.uid,
-        dateCreated: tempUser.dateCreated, image: '', isVerified: false
-      } as User);
-    } catch (e) {
-      let message: string;
-      switch (e.code) {
-        case 'auth/account-exists-with-different-credential':
-          message = 'This account already exists with diffent credentials, please try signing in.';
-          break;
-        case 'auth/auth-domain-config-required':
-          message = 'System error. :(';
-          break;
-        case 'auth/cancelled-popup-request':
-          message = 'Sign in popup was canceled :(';
-          break;
-        case 'auth/operation-not-allowed':
-          message = 'This method of signing in is currently disabled, please try another method.';
-          break;
-        case 'auth/operation-not-supported-in-this-environment':
-          message = 'Must be https and running in registered domain.';
-          break;
-        case 'auth/popup-blocked':
-          message = 'Signin popup was blocked';
-          break;
-        case 'auth/popup-closed-by-user':
-          message = 'Sign in popup was canceled :(';
-          break;
-        case 'auth/unauthorized-domain':
-          message = 'This domain is not authorized for this signin method.';
-          break;
-        default:
-          message = 'Cannot process, unknown error';
-      }
-
-      this.snackBar.open(message, 'OK', { duration: 2000 });
-    }
   }
 
-  public saveUserToDB(lgUser: User): Promise<void> {
-    return this.db.object('users/' + lgUser.uid).set(lgUser);
+  public saveUserToDB(user: User): Promise<void> {
+    return this.db.object('users/' + user.uid).set(user);
   }
 
   public getUIDByVanity(vanity: string): Observable<string> {
@@ -244,6 +260,9 @@ export class FirebaseService {
 
   public async getUserProfileImg(uid: string): Promise<string> {
     try {
+      if (this.serviceUserReference && uid === this.serviceUserReference.uid && !this.serviceUserReference.profileImage) {
+        return null;
+      }
       const response = this.storage.ref('users').child(uid).child('/profile.jpg').getDownloadURL().pipe(take(1)).toPromise();
       return response;
     } catch (e) {
@@ -321,7 +340,7 @@ export class FirebaseService {
 
       try {
         await this.saveUserToDB({
-          email, fname, lname,
+          email, fname, lname, profileImage: false,
           bio: '', job: '', company: '', twitter: '',
           facebook: '', instagram: '', twitch: '', youtube: '',
           google: '', uid: user.uid, linkedin: '', resumeLink: '',
@@ -399,6 +418,12 @@ export class FirebaseService {
       console.log('message', e);
 
       return null;
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.fbAuthUserSubscription) {
+      this.fbAuthUserSubscription.unsubscribe();
     }
   }
 }

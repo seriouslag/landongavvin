@@ -22,7 +22,7 @@ export class AboutComponent implements OnInit, OnDestroy, OnChanges {
   showEditBtn = false;
   editBtnText = 'Edit';
 
-  user: firebase.User;
+  fbAuthUser: firebase.User;
 
   userProperties = [
     'bio',
@@ -61,14 +61,14 @@ export class AboutComponent implements OnInit, OnDestroy, OnChanges {
       console.log('editMode in about', edit);
     });
 
-    this.userSubscription = this.firebaseService.user.subscribe(user => {
-      this.user = user;
-      if (user === null) {
+    this.userSubscription = this.firebaseService.fbAuthUser.subscribe(fbAuthUser => {
+      this.fbAuthUser = fbAuthUser;
+      if (fbAuthUser === null) {
         this.setEditMode(false);
         this.showEditBtn = false;
       } else {
         if (this.aboutUser) {
-          if (user.uid === this.aboutUser.uid) {
+          if (fbAuthUser.uid === this.aboutUser.uid) {
             this.showEditBtn = true;
           }
         }
@@ -84,15 +84,13 @@ export class AboutComponent implements OnInit, OnDestroy, OnChanges {
       if (propName === 'aboutUser') {
         this.handleAboutUserChange();
         // check for user being undefined because you could land on this page before firebase does a check
-        if (this.user === null || isUndefined(this.user)) {
+        if (this.fbAuthUser === null || isUndefined(this.fbAuthUser)) {
           this.setEditMode(false);
           this.showEditBtn = false;
         } else {
-          if (this.aboutUser) {
-            if (this.user.uid === this.aboutUser.uid) {
-              this.editBtnText = 'Edit';
-              this.showEditBtn = true;
-            }
+          if (this.aboutUser && this.fbAuthUser.uid === this.aboutUser.uid) {
+            this.editBtnText = 'Edit';
+            this.showEditBtn = true;
           }
         }
       }
@@ -113,13 +111,15 @@ export class AboutComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private hasChanged(): boolean {
-    let changed = false;
+    // let changed = false;
 
-    for (const property of this.userProperties) {
-      if (this[property] !== this.aboutUser[property]) {
-        changed = true;
-      }
-    }
+    const changed = this.userProperties.some((prop) => this[prop] !== this.aboutUser[prop]);
+
+    // for (const property of this.userProperties) {
+    //   if (this[property] !== this.aboutUser[property]) {
+    //     changed = true;
+    //   }
+    // }
 
     return changed;
   }
@@ -138,21 +138,22 @@ export class AboutComponent implements OnInit, OnDestroy, OnChanges {
 
   private handleAboutUserChange(): void {
     this.noImg = true;
-    if (this.aboutUser.image !== null || !isUndefined(this.aboutUser.image)) {
+    if (this.aboutUser.profileImage) {
       this.handleProfilePic();
     }
 
   }
 
-  private handleProfilePic() {
-    this.firebaseService.getUserProfileImg(this.aboutUser.uid).then((url: string) => {
-      this.aboutUser.image = url;
-      this.noImg = false;
-    }, (error) => {
+  private async handleProfilePic() {
+    try {
+      const imgUrl = await this.firebaseService.getUserProfileImg(this.aboutUser.uid);
+      this.aboutUser.image = imgUrl;
+      this.noImg = imgUrl ? false : true;
+    } catch (e) {
       this.noImg = true;
       this.aboutUser.image = '';
-      console.log('FIREBASE STORAGE IMG NOT FOUND', error);
-    });
+      console.log('FIREBASE STORAGE IMG NOT FOUND', e);
+    }
   }
 
   public submit() {

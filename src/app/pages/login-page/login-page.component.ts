@@ -14,15 +14,14 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   private routerSubscription: Subscription;
   private redirectAfterLogin: string;
   private userSubscription: Subscription;
-  user: firebase.User;
+  fbAuthUser: firebase.User;
 
-  constructor(private activatedRoute: ActivatedRoute, private firebaseService: FirebaseService) {
-    this.userSubscription = this.firebaseService.user.subscribe((user) => {
-      this.user = user;
-    });
-  }
+  constructor(private activatedRoute: ActivatedRoute, private firebaseService: FirebaseService) {}
 
   ngOnInit(): void {
+    this.userSubscription = this.firebaseService.fbAuthUser.subscribe((fbAuthUser) => {
+      this.fbAuthUser = fbAuthUser;
+    });
     this.routerSubscription = this.activatedRoute.params.subscribe(params => {
       if (params.redirectAfterLogin) {
         this.redirectAfterLogin = params.redirectAfterLogin;

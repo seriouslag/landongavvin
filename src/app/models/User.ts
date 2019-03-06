@@ -18,6 +18,7 @@ interface User {
   resumeLink: string;
   dateCreated: string;
   isVerified: boolean;
+  profileImage: boolean;
 }
 
 export { User };

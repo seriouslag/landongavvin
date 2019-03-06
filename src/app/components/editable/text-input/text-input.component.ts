@@ -5,7 +5,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: './text-input.component.html',
   styleUrls: ['./text-input.component.scss']
 })
-export class TextInputComponent implements OnInit {
+export class TextInputComponent {
 
   @Input()
   editMode: boolean;
@@ -29,9 +29,6 @@ export class TextInputComponent implements OnInit {
   enter: EventEmitter<void> = new EventEmitter<void>();
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
   public onInput(text: string): void {
     this.notify.emit(text);

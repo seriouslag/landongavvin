@@ -9,20 +9,20 @@ import { Subscription, of } from 'rxjs';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  private userSubscription: Subscription;
-  user: firebase.User = null;
+  private fbAuthUserSubscription: Subscription;
+  fbAuthUser: firebase.User = null;
 
   constructor(private firebaseService: FirebaseService) { }
 
   ngOnInit() {
-    this.userSubscription = this.firebaseService.user.subscribe((user) => {
-      this.user = user;
+    this.fbAuthUserSubscription = this.firebaseService.fbAuthUser.subscribe((fbAuthUser) => {
+      this.fbAuthUser = fbAuthUser;
     });
   }
 
   ngOnDestroy(): void {
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
+    if (this.fbAuthUserSubscription) {
+      this.fbAuthUserSubscription.unsubscribe();
     }
   }
 

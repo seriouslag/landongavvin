@@ -41,13 +41,12 @@ export class SocialLinkComponent implements OnInit, OnChanges, OnDestroy {
   private mediaSubscription: Subscription;
   mediaAlias: string;
 
-  constructor(private mediaObserver: MediaObserver ) {
+  constructor(private mediaObserver: MediaObserver ) {}
+
+  ngOnInit() {
     this.mediaSubscription = this.mediaObserver.media$.subscribe((mediaAlias: MediaChange) => {
       this.mediaAlias = mediaAlias.mqAlias;
     });
-  }
-
-  ngOnInit() {
     this.type = this.type.toLowerCase();
     this.setHREF(this.type);
     if (this.mediaObserver.isActive('xs')) {

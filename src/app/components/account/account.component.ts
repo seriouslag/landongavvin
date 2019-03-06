@@ -9,24 +9,19 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   styleUrls: ['./account.component.scss']
 })
 export class AccountComponent implements OnInit, OnDestroy {
-
-  user: firebase.User;
-  lgUser: User;
-
+  user: User;
+  fbAuthUser: firebase.User;
   private userSubscription: Subscription;
-  private lgUserSubscription: Subscription;
+  private fbAuthUserSubscription: Subscription;
 
   constructor(private firebaseService: FirebaseService) { }
 
   ngOnInit(): void {
-    this.userSubscription = this.firebaseService.user.subscribe(user => {
+    this.userSubscription = this.firebaseService.user.subscribe((user) => {
       this.user = user;
-
-      if (this.user != null) {
-        this.lgUserSubscription = this.firebaseService.getUserByUID(user.uid).subscribe(lgUser => {
-          this.lgUser = lgUser;
-        });
-      }
+    });
+    this.fbAuthUserSubscription = this.firebaseService.fbAuthUser.subscribe((fbAuthUser) => {
+      this.fbAuthUser = fbAuthUser;
     });
   }
 
@@ -34,8 +29,9 @@ export class AccountComponent implements OnInit, OnDestroy {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }
-    if (this.lgUserSubscription) {
-      this.lgUserSubscription.unsubscribe();
+
+    if (this.fbAuthUserSubscription) {
+      this.fbAuthUserSubscription.unsubscribe();
     }
   }
 

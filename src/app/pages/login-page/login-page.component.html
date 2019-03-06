@@ -3,14 +3,14 @@
   fxLayoutAlign="center center"
 >
   <mat-card>
-    <app-login-form *ngIf="!user else loggedIn"></app-login-form>
+    <app-login-form *ngIf="!fbAuthUser else loggedIn"></app-login-form>
     <ng-template #loggedIn>
       <div
         fxLayout="column"
         fxLayoutAlign="center center"
       >
         <p>
-          You are already logged in as {{ user.displayName }}
+          You are already logged in as {{ fbAuthUser.displayName }}
         </p>
         <button
           mat-button

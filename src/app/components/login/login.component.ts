@@ -4,6 +4,8 @@ import { MatSnackBar, MatDialogRef } from '@angular/material';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { NewUserDialogComponent } from '../dialogs/new-user-dialog/new-user-dialog.component';
 import { DialogService } from 'src/app/services/dialog.service';
+import { Router } from '@angular/router';
+import { User } from 'src/app/models/User';
 
 @Component({
   selector: 'app-login',
@@ -43,8 +45,8 @@ export class LoginComponent implements OnInit {
   });
 
   constructor(public snackBar: MatSnackBar, private firebaseService: FirebaseService,
-              private dialogService: DialogService, private snackbar: MatSnackBar) {
-  }
+              private dialogService: DialogService, private snackbar: MatSnackBar,
+              private router: Router) {}
 
   static passwordMatchValidator(fg: FormGroup) {
     const password = fg.get('password').value;
@@ -129,10 +131,11 @@ export class LoginComponent implements OnInit {
 
           this.newuserDialog = this.dialogService.openDialog(NewUserDialogComponent, {});
           this.newuserDialog.componentInstance.firebaseService = this.firebaseService;
-          this.newuserDialog.afterClosed().subscribe(result => {
-            this.snackbar.open('This feature has not been fully implemented yet, nothing was saved.', 'OK', { duration: 3000 });
+          this.newuserDialog.afterClosed().subscribe((result: User | false) => {
+            if (result) {
+              this.router.navigateByUrl(`/about/${result.vanity}`);
+            }
           });
-
         } else {
           // Snackbar handled by service
           this.submitted = false;

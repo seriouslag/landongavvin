@@ -18,12 +18,11 @@ export class AboutPageComponent implements OnInit, OnDestroy {
 
   private routerSubscription: Subscription;
   private vanitySubscription: Subscription;
-  private lgUserSubscription: Subscription;
+  private userSubscription: Subscription;
 
   constructor(private firebaseService: FirebaseService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-
     this.routerSubscription = this.activatedRoute.params.subscribe(params => {
       if (params.vanity) {
         this.vanitySubscription = this.firebaseService.getUIDByVanity(params.vanity.toLowerCase()).subscribe((aboutUID) => {
@@ -45,8 +44,8 @@ export class AboutPageComponent implements OnInit, OnDestroy {
     if (this.vanitySubscription) {
       this.vanitySubscription.unsubscribe();
     }
-    if (this.lgUserSubscription) {
-      this.lgUserSubscription.unsubscribe();
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
     }
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
@@ -54,8 +53,8 @@ export class AboutPageComponent implements OnInit, OnDestroy {
   }
 
   private getUserByUID(uid: string) {
-    this.lgUserSubscription = this.firebaseService.getUserByUID(uid).subscribe(aboutUser => {
-      this.aboutUser = aboutUser as User;
+    this.userSubscription = this.firebaseService.getUserByUID(uid).subscribe(aboutUser => {
+      this.aboutUser = aboutUser;
       if (aboutUser === null) {
         this.failed = true;
         this.waiting = false;

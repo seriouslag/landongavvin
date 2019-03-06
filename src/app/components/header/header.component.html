@@ -6,6 +6,6 @@
 >
   <app-menu></app-menu>
   <div fxFlex></div>
-  <app-login *ngIf="user === null || user === {}"></app-login>
-  <app-account *ngIf="user !== null && user !== {}"></app-account>
+  <app-login *ngIf="fbAuthUser === null || fbAuthUser === {}"></app-login>
+  <app-account *ngIf="fbAuthUser !== null && fbAuthUser !== {}"></app-account>
 </header>
