@@ -46,7 +46,7 @@ export class NewUserDialogComponent implements OnInit {
     };
     try {
       await this.firebaseService.updateUserInfo(updateObject);
-      this.snackBar.open('Your profile has been updated.', 'OK', { duration: 2onnboar000 });
+      this.snackBar.open('Your profile has been updated.', 'OK', { duration: 2000 });
     } catch (e) {
       console.log(e);
       this.snackBar.open('Your profile failed to update.', 'OK', { duration: 2000 });
