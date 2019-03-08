@@ -31,7 +31,7 @@
       mat-card-image
       *ngIf="!blog.hasVideo && blog.image.length>0"
       [ngClass]="{'blogImageLarge': cardSize === 3, 'blogImageMed': cardSize === 2, 'blogImageSmall': cardSize === 1, 'blogImageXSmall': cardSize === 0}"
-    >
+    > 
   </div>
   <mat-card-content>
     {{blog.content}}

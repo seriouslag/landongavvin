@@ -1,26 +1,35 @@
 <mat-card>
   <mat-card-header fxLayout="row">
-    <app-profile-image mat-card-avatar
+    <app-profile-image
+      mat-card-avatar
       class="profile_image"
       [src]="aboutUser.image"
       [editMode]="editMode"
-      *ngIf="noImg === false"></app-profile-image>
+      *ngIf="noImg === false"
+    ></app-profile-image>
     <mat-card-title>
       <div fxLayout="row">
         <span>{{aboutUser.fname}} {{aboutUser.lname}}</span>
         <div fxFlex></div>
-        <app-email-verification [editMode]="editMode"
-          [editUser]="aboutUser"></app-email-verification>
+        <app-email-verification
+          [editMode]="editMode"
+          [editUser]="aboutUser"
+        ></app-email-verification>
       </div>
     </mat-card-title>
     <div fxFlex></div>
     <div *ngIf="showEditBtn === true">
-      <button mat-button
-        (click)="editSaveBtn()">{{editBtnText}}</button>
+      <button
+        mat-button
+        (click)="editSaveBtn()"
+      >
+        {{editBtnText}}
+      </button>
     </div>
     <mat-card-subtitle>
 
-      <app-text-input #job
+      <app-text-input
+        #job
         [editMode]="editMode"
         [type]="'text'"
         [text]="aboutUser.job"
@@ -28,7 +37,8 @@
         [maxlength]="20"
         (value)="job"
         (notify)="updateUserProperties('job', $event)"
-        (enter)="submit()"></app-text-input>
+        (enter)="submit()"
+      ></app-text-input>
       <span *ngIf="aboutUser.company"> @ </span>
       <app-text-input
         #company
