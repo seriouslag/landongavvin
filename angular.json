@@ -56,6 +56,9 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "es5": {
+              "tsConfig": "./tsconfig-es5.app.json"
             }
           }
         },
@@ -67,6 +70,9 @@
           "configurations": {
             "production": {
               "browserTarget": "landongavin:build:production"
+            },
+            "es5": {
+              "browserTarget": "landongavin:build:es5"
             }
           }
         },

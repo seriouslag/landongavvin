@@ -32,7 +32,7 @@ export class SocialLinkComponent implements OnInit, OnChanges, OnDestroy {
   @Output()
   notify: EventEmitter<string> = new EventEmitter<string>();
 
-  @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
+  @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
 
   href = '';
   icon = '';

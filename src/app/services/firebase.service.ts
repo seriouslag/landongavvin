@@ -271,7 +271,7 @@ export class FirebaseService implements OnDestroy {
   }
 
   public fetchProvidersForEmail(email: string): Promise<string[]> {
-    return this.auth.auth.fetchProvidersForEmail(email);
+    return this.auth.auth.fetchSignInMethodsForEmail(email);
   }
 
   public sendPasswordResetEmail(email: string, actionCodeSettings: any): Promise<void> {
