@@ -3,8 +3,9 @@
   fxLayoutAlign="space-around center"
 >
   <mat-toolbar
-    fxLayout="row"
+    fxLayout="column"
     fxLayoutAlign="space-between center"
+    fxLayout.gt-sm="row"
   >
     <a
       mat-button
@@ -12,8 +13,8 @@
     >
       {{domain}}
     </a>
-    <p>
+    <div>
       Last built: {{lastBuildDate}}
-    </p>
+    </div>
   </mat-toolbar>
 </footer>

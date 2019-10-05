@@ -65,6 +65,10 @@
           >
             Vanity must be shorter than 30 characters in length.
           </mat-hint>
+          <mat-hint *ngIf="settingsForm.controls['vanity'].value === user?.vanity && settingsForm.controls['vanity'].touched"
+            class="vanity">
+            Your current vanity.
+          </mat-hint>
           <mat-hint
             *ngIf="settingsForm.controls['vanity'].hasError('vanityInUse')"
             class="errorHints"
@@ -84,12 +88,6 @@
             class="vanity"
           >
             This vanity is available to use.
-          </mat-hint>
-          <mat-hint
-            *ngIf="settingsForm.controls['vanity'].value === user?.vanity && settingsForm.controls['vanity'].touched"
-            class="vanity"
-          >
-            Your current vanity.
           </mat-hint>
         </mat-form-field>
 
