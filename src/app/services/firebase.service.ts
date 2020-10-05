@@ -7,7 +7,7 @@ import { take, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import * as firebase from 'firebase/app';
 import { User } from '../models/User';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AngularFireStorage } from '@angular/fire/storage';
 
 @Injectable({

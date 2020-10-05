@@ -9,7 +9,7 @@ import {
   OnChanges,
   OnDestroy
 } from '@angular/core';
-import { MatMenuTrigger } from '@angular/material';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { Subscription } from 'rxjs';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 

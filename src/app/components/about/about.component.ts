@@ -3,7 +3,7 @@ import { User } from 'src/app/models/User';
 import { Subscription } from 'rxjs';
 import { EditModeService } from 'src/app/services/edit-mode.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { isUndefined } from 'util';
 
 @Component({

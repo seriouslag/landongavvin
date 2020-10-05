@@ -22,7 +22,7 @@ import { AccountComponent } from './components/account/account.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './components/login/login.component';
 import { NewUserDialogComponent } from './components/dialogs/new-user-dialog/new-user-dialog.component';
-import { MatIconRegistry } from '@angular/material';
+import { MatIconRegistry } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
 import { QuestionDialogComponent } from './components/dialogs/question-dialog/question-dialog.component';
 import { AppCommonModule } from './modules/app-common.module';

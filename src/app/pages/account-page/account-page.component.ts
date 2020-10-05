@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { MatDialogRef, MatSnackBar } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { DialogService } from 'src/app/services/dialog.service';
