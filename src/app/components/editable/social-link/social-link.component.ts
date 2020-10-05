@@ -1,17 +1,27 @@
 import {
   Component,
-  OnInit,
-  SimpleChanges,
-  Input,
-  Output,
-  EventEmitter,
-  ViewChild,
+
+
+
+
+  EventEmitter, Input,
+
+
+
   OnChanges,
-  OnDestroy
+  OnDestroy, OnInit,
+
+
+  Output, SimpleChanges,
+
+
+
+  ViewChild
 } from '@angular/core';
+import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Subscription } from 'rxjs';
-import { MediaChange, MediaObserver } from '@angular/flex-layout';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-social-link',
@@ -44,7 +54,11 @@ export class SocialLinkComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private mediaObserver: MediaObserver ) {}
 
   ngOnInit() {
-    this.mediaSubscription = this.mediaObserver.media$.subscribe((mediaAlias: MediaChange) => {
+    this.mediaSubscription = this.mediaObserver.asObservable()
+    .pipe(
+      filter((changes: MediaChange[]) => changes.length > 0),
+      map((changes: MediaChange[]) => changes[0])
+    ).subscribe((mediaAlias: MediaChange) => {
       this.mediaAlias = mediaAlias.mqAlias;
     });
     this.type = this.type.toLowerCase();

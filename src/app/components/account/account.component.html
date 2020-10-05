@@ -11,14 +11,14 @@
         >
           <img
             src="{{fbAuthUser.photoURL}}"
-            *ngIf="fbAuthUser.photoURL">
+            *ngIf="fbAuthUser?.photoURL">
               <div
-                *ngIf="fbAuthUser.displayName"
+                *ngIf="fbAuthUser?.displayName"
               >
                 {{fbAuthUser.displayName}}
               </div>
           <div
-            *ngIf="!user.displayName"
+            *ngIf="!user?.displayName"
           >
             {{user.email}}
           </div>

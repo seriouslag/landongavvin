@@ -1,14 +1,14 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
-import { Blog } from '../models/Blog';
-import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { take, map } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
-import * as firebase from 'firebase/app';
-import { User } from '../models/User';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { auth } from 'firebase/app';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { map, take, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { Blog } from '../models/Blog';
+import { User } from '../models/User';
 
 @Injectable({
   providedIn: 'root'
@@ -27,15 +27,15 @@ export class FirebaseService implements OnDestroy {
   private serviceUserReference: User;
 
   constructor(private db: AngularFireDatabase,
-              private auth: AngularFireAuth,
+              private fbAuth: AngularFireAuth,
               private storage: AngularFireStorage,
               private snackBar: MatSnackBar) {
     console.log('in firebase service constructor');
     this.blogsRef = this.db.list<Blog>('/blog');
 
-    this.fbAuthUser = auth.authState;
+    this.fbAuthUser = fbAuth.authState;
 
-    this.fbAuthUserSubscription = auth.authState.subscribe((fbAuthUser) => {
+    this.fbAuthUserSubscription = fbAuth.authState.subscribe((fbAuthUser) => {
       if (!fbAuthUser) {
         this.user.next(null);
         this.serviceUserReference = null;
@@ -145,11 +145,12 @@ export class FirebaseService implements OnDestroy {
   }
 
   public async refreshUser() {
-    if (!this.auth.auth.currentUser) {
+    const user = await this.fbAuth.currentUser;
+    if (!user) {
       return;
     }
 
-    await this.auth.auth.currentUser.reload();
+    user.reload();
     if (!environment.production) {
       console.log('refreshed user');
     }
@@ -157,7 +158,7 @@ export class FirebaseService implements OnDestroy {
 
   public async logout(): Promise<void> {
     try {
-      const loginResponse = this.auth.auth.signOut();
+      const loginResponse = await this.fbAuth.signOut();
       this.snackBar.open('Successfully logged out.', 'OK', { duration: 1750 });
     } catch (e) {
       console.log('Failed to logout', e);
@@ -167,7 +168,7 @@ export class FirebaseService implements OnDestroy {
 
   public async loginWithGoogleProvider(): Promise<void> {
       try {
-        const loginResponse = await this.auth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+        const loginResponse = await this.fbAuth.signInWithPopup(new auth.GoogleAuthProvider());
         const fireabaseUser: firebase.User = loginResponse.user;
         const user: User = await this.db.object<User>('/users/' + fireabaseUser.uid).valueChanges().pipe(
           take(1)
@@ -245,14 +246,15 @@ export class FirebaseService implements OnDestroy {
 
   public getUIDByVanity(vanity: string): Observable<string> {
     return this.db.object('/vanities/' + vanity).valueChanges().pipe(
-      map((uid) => uid.toString())
+      map((uid) => uid?.toString())
     );
   }
 
   public async sendEmailVerification(): Promise<void> {
     try {
-      const emailResponse = await this.auth.auth.currentUser.sendEmailVerification();
-      this.snackBar.open('A verification email has been sent to ' + this.auth.auth.currentUser.email, 'OK', { duration: 4000 });
+      const user = await this.fbAuth.currentUser;
+      const emailResponse = await user.sendEmailVerification();
+      this.snackBar.open('A verification email has been sent to ' + user.email, 'OK', { duration: 4000 });
     } catch (e) {
       this.snackBar.open('Failed to send a verification email please try again later.', 'OK', { duration: 4000 });
     }
@@ -271,11 +273,11 @@ export class FirebaseService implements OnDestroy {
   }
 
   public fetchProvidersForEmail(email: string): Promise<string[]> {
-    return this.auth.auth.fetchSignInMethodsForEmail(email);
+    return this.fbAuth.fetchSignInMethodsForEmail(email);
   }
 
   public sendPasswordResetEmail(email: string, actionCodeSettings: any): Promise<void> {
-    return this.auth.auth.sendPasswordResetEmail(email, actionCodeSettings);
+    return this.fbAuth.sendPasswordResetEmail(email, actionCodeSettings);
   }
 
   // Use until backend is setup
@@ -283,18 +285,20 @@ export class FirebaseService implements OnDestroy {
     return this.db.list('/vanities');
   }
 
-  public updateUserInfo(updateObject: any): Promise<any> {
-    return this.db.object('/users/' + this.auth.auth.currentUser.uid).update(updateObject);
+  public async updateUserInfo(updateObject: any): Promise<any> {
+    const user = await this.fbAuth.currentUser;
+    return this.db.object('/users/' + user.uid).update(updateObject);
   }
 
-  public setUserVanity(vanity: string): Promise<void> {
+  public async setUserVanity(vanity: string): Promise<void> {
     if (vanity.length <= 0) {
       // add error to promise
       console.log('Vanity cannot be empty');
     }
 
     vanity = vanity.toLowerCase();
-    const uid = this.auth.auth.currentUser.uid;
+    const cUser = await this.fbAuth.currentUser;
+    const uid = cUser.uid;
     let user: User;
     let oldVanity: string;
     return new Promise(() => {
@@ -316,21 +320,22 @@ export class FirebaseService implements OnDestroy {
     const ret = this.db.object<User>('/users/' + uid).valueChanges();
     ret
     .pipe(
-      take(1)
-    )
-    .subscribe((user: User) => {
-      if (user && this.auth.auth.currentUser && user.uid === this.auth.auth.currentUser.uid) {
-        if (user.isVerified !== this.auth.auth.currentUser.emailVerified) {
-          this.updateUserInfo({ isVerified: this.auth.auth.currentUser.emailVerified });
-        }
-      }
-    });
+      take(1),
+      tap(async (user) => {
+        const cUser = await this.fbAuth.currentUser;
+        if (user && cUser && user.uid === cUser.uid) {
+            if (user.isVerified !== cUser.emailVerified) {
+              this.updateUserInfo({ isVerified: cUser.emailVerified });
+            }
+          }
+      }),
+    );
     return ret;
   }
 
   public async createUserFromEmail(email: string, password: string, fname: string, lname: string): Promise<firebase.User> {
     try {
-      const createUserResponse = await this.auth.auth.createUserWithEmailAndPassword(email, password);
+      const createUserResponse = await this.fbAuth.createUserWithEmailAndPassword(email, password);
 
       if (!createUserResponse) {
         console.log('The response from creating a user is', null);
@@ -379,7 +384,7 @@ export class FirebaseService implements OnDestroy {
 
   public async loginWithEmailProvider(email: string, password: string): Promise<firebase.User> {
     try {
-      const signInResponse = await this.auth.auth.signInWithEmailAndPassword(email, password);
+      const signInResponse = await this.fbAuth.signInWithEmailAndPassword(email, password);
 
       const user = signInResponse.user;
 

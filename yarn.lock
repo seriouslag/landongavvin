@@ -203,10 +203,12 @@
   dependencies:
     tslib "^2.0.0"
 
-"@angular/fire@^5.2.1":
-  version "5.4.2"
-  resolved "https://registry.yarnpkg.com/@angular/fire/-/fire-5.4.2.tgz#fb2d54935de0d83789e940e5f57a6ffc0e1ef4eb"
-  integrity sha512-QzB5d1wtqr9jxfsVNv2+569MlfK4/QrrpNy0IngOHdxS4FBbXqMOcx37iv1m2mzJv9zlGUddUX44IZP5Xfb3cw==
+"@angular/fire@6.0.3":
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/@angular/fire/-/fire-6.0.3.tgz#7e4e988409cfc22e3abd4085c7c4b7d6f8f2533a"
+  integrity sha512-teaPvVPEZA2ymHkaCyJC5KJbp+Ai5nLHsEVUXSJZRCUV8KTg/XOG/toNiATHtwxGgxrKRZ63pOfQFonZYT8TLw==
+  dependencies:
+    tslib "^2.0.0"
 
 "@angular/flex-layout@^10.0.0-beta.32":
   version "10.0.0-beta.32"
@@ -4860,7 +4862,7 @@ firebase-tools@^7.4.0:
     uuid "^3.0.0"
     winston "^1.0.1"
 
-firebase@^7.1.0:
+firebase@7.22.0:
   version "7.22.0"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-7.22.0.tgz#ce4640ca342cf5b29ab35917ae5b13ed3776c2c5"
   integrity sha512-DoE93JoTYppZc+vOB10HDpp49UHPaz4MklE5tJ2XGCZ8ejbU/MOUwOtG4jakAkrl/rZNKVQ6yEimVsQQtZY+5w==
@@ -9392,17 +9394,10 @@ rxjs@6.6.2:
   dependencies:
     tslib "^1.9.0"
 
-rxjs@^6.4.0, rxjs@^6.6.0:
+rxjs@^6.4.0, rxjs@^6.6.0, rxjs@~6.6.3:
   version "6.6.3"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.6.3.tgz#8ca84635c4daa900c0d3967a6ee7ac60271ee552"
   integrity sha512-trsQc+xYYXZ3urjOiJOuCOa5N3jAZ3eiSpQB5hIT8zGlL2QfnHLJ2r7GMkBGuIausdJN1OneaI6gQlsqNHHmZQ==
-  dependencies:
-    tslib "^1.9.0"
-
-rxjs@~6.5.3:
-  version "6.5.5"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.5.tgz#c5c884e3094c8cfee31bf27eb87e54ccfc87f9ec"
-  integrity sha512-WfQI+1gohdf0Dai/Bbmk5L5ItH5tYqm3ki2c5GdWhKjalzjg93N3avFjVStyZZz+A2Em+ZxKH5bNghw9UeylGQ==
   dependencies:
     tslib "^1.9.0"
 

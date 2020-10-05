@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, SimpleChanges, OnDestroy, OnChanges } from '@angular/core';
-import { User } from 'src/app/models/User';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { User } from 'src/app/models/User';
 import { EditModeService } from 'src/app/services/edit-mode.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { isUndefined } from 'util';
 
 @Component({
   selector: 'app-about',
@@ -84,7 +83,7 @@ export class AboutComponent implements OnInit, OnDestroy, OnChanges {
       if (propName === 'aboutUser') {
         this.handleAboutUserChange();
         // check for user being undefined because you could land on this page before firebase does a check
-        if (this.fbAuthUser === null || isUndefined(this.fbAuthUser)) {
+        if (this.fbAuthUser === null || this.fbAuthUser === undefined) {
           this.setEditMode(false);
           this.showEditBtn = false;
         } else {
@@ -125,7 +124,7 @@ export class AboutComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public updateUserProperties(property: string, event: string): void {
-    if (this.editMode === true && !isUndefined(event)) {
+    if (this.editMode === true && event !== undefined) {
 
       this[property] = event;
       if (this.hasChanged()) {
@@ -167,7 +166,7 @@ export class AboutComponent implements OnInit, OnDestroy, OnChanges {
       let update = false;
 
       for (const property of this.userProperties) {
-        if (this.aboutUser[property] !== this[property] && !isUndefined(this[property])) {
+        if (this.aboutUser[property] !== this[property] && this[property] !== undefined) {
           updateObject[property] = this[property];
           update = true;
         }
