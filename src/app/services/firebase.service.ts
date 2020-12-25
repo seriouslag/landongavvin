@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { auth } from 'firebase/app';
+import firebase from 'firebase/app';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
@@ -168,7 +168,7 @@ export class FirebaseService implements OnDestroy {
 
   public async loginWithGoogleProvider(): Promise<void> {
       try {
-        const loginResponse = await this.fbAuth.signInWithPopup(new auth.GoogleAuthProvider());
+        const loginResponse = await this.fbAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
         const fireabaseUser: firebase.User = loginResponse.user;
         const user: User = await this.db.object<User>('/users/' + fireabaseUser.uid).valueChanges().pipe(
           take(1)

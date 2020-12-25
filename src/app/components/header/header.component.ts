@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import firebase from 'firebase/app';
+import { Subscription } from 'rxjs';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { Subscription, of } from 'rxjs';
 
 @Component({
   selector: 'app-header',

@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import firebase from 'firebase/app';
+import { Subscription } from 'rxjs';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { User } from 'src/app/models/User';
 
 @Component({
   selector: 'app-login-page',

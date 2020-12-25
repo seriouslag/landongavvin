@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import firebase from 'firebase/app';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/models/User';
 import { EditModeService } from 'src/app/services/edit-mode.service';

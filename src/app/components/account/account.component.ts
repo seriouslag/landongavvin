@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { User } from 'src/app/models/User';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import firebase from 'firebase/app';
 import { Subscription } from 'rxjs';
+import { User } from 'src/app/models/User';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
