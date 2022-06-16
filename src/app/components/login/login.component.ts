@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators, AbstractControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -23,24 +23,24 @@ export class LoginComponent implements OnInit {
 
   public closedLogin = false;
 
-  loginForm: FormGroup = new FormGroup({
-    email: new FormControl(null, [Validators.required, LoginComponent.validateEmail]),
-    password: new FormControl(null, [Validators.required]),
+  loginForm: UntypedFormGroup = new UntypedFormGroup({
+    email: new UntypedFormControl(null, [Validators.required, LoginComponent.validateEmail]),
+    password: new UntypedFormControl(null, [Validators.required]),
   });
 
-  matchingEmail: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.required, LoginComponent.validateEmail]),
-    cemail: new FormControl('', [Validators.required]),
+  matchingEmail: UntypedFormGroup = new UntypedFormGroup({
+    email: new UntypedFormControl('', [Validators.required, LoginComponent.validateEmail]),
+    cemail: new UntypedFormControl('', [Validators.required]),
   }, LoginComponent.emailMatchValidator);
 
-  matchingPassword: FormGroup = new FormGroup({
-    password: new FormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(64), LoginComponent.validatePW]),
-    cpassword: new FormControl(null, [Validators.required]),
+  matchingPassword: UntypedFormGroup = new UntypedFormGroup({
+    password: new UntypedFormControl(null, [Validators.required, Validators.minLength(8), Validators.maxLength(64), LoginComponent.validatePW]),
+    cpassword: new UntypedFormControl(null, [Validators.required]),
   }, LoginComponent.passwordMatchValidator);
 
-  accountForm: FormGroup = new FormGroup({
-    firstname: new FormControl(null, [Validators.required, Validators.minLength(2)]),
-    lastname: new FormControl(null, [Validators.required, Validators.minLength(2)]),
+  accountForm: UntypedFormGroup = new UntypedFormGroup({
+    firstname: new UntypedFormControl(null, [Validators.required, Validators.minLength(2)]),
+    lastname: new UntypedFormControl(null, [Validators.required, Validators.minLength(2)]),
     matchingEmail: this.matchingEmail,
     matchingPassword: this.matchingPassword,
   });

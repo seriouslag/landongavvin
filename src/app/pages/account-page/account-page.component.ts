@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormGroup, FormControl, Validators, AbstractControl, ValidatorFn, AsyncValidatorFn } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators, AbstractControl, ValidatorFn, AsyncValidatorFn } from '@angular/forms';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { DialogService } from 'src/app/services/dialog.service';
 import { User } from 'src/app/models/User';
@@ -31,10 +31,10 @@ export class AccountPageComponent implements OnInit, OnDestroy {
 
   confirmDialog: MatDialogRef<QuestionDialogComponent>|undefined;
 
-  settingsForm: FormGroup = new FormGroup({
-    firstname: new FormControl(null, [Validators.minLength(2)]),
-    lastname: new FormControl(null, [Validators.minLength(2)]),
-    vanity: new FormControl(null,
+  settingsForm: UntypedFormGroup = new UntypedFormGroup({
+    firstname: new UntypedFormControl(null, [Validators.minLength(2)]),
+    lastname: new UntypedFormControl(null, [Validators.minLength(2)]),
+    vanity: new UntypedFormControl(null,
       [Validators.minLength(3), Validators.maxLength(30), VanityValidator], [this.vanityMatchValidator.bind(this)])
   });
 

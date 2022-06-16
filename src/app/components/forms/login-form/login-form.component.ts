@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators, AbstractControl } from '@angular/forms';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -8,9 +8,9 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent implements OnInit {
-  loginForm: FormGroup = new FormGroup({
-    email: new FormControl(null, [Validators.required, LoginFormComponent.validateEmail]),
-    password: new FormControl(null, [Validators.required]),
+  loginForm: UntypedFormGroup = new UntypedFormGroup({
+    email: new UntypedFormControl(null, [Validators.required, LoginFormComponent.validateEmail]),
+    password: new UntypedFormControl(null, [Validators.required]),
   });
 
   constructor(private firebaseService: FirebaseService) { }

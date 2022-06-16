@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from 'src/app/models/User';
@@ -17,14 +17,14 @@ export class NewUserDialogComponent implements OnInit, OnDestroy {
   userSubscription: Subscription|undefined;
   firebaseService: FirebaseService|undefined;
 
-  occupationForm: FormGroup = new FormGroup({
-    occupation: new FormControl(null, [Validators.required])
+  occupationForm: UntypedFormGroup = new UntypedFormGroup({
+    occupation: new UntypedFormControl(null, [Validators.required])
   });
-  companyForm: FormGroup = new FormGroup({
-    company: new FormControl(null, [Validators.required])
+  companyForm: UntypedFormGroup = new UntypedFormGroup({
+    company: new UntypedFormControl(null, [Validators.required])
   });
-  bioForm: FormGroup = new FormGroup({
-    bio: new FormControl(null, [Validators.required])
+  bioForm: UntypedFormGroup = new UntypedFormGroup({
+    bio: new UntypedFormControl(null, [Validators.required])
   });
 
   constructor(private newuserDialog: MatDialogRef<NewUserDialogComponent>, private snackBar: MatSnackBar) {}

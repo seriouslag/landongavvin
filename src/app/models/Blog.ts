@@ -1,5 +1,3 @@
-import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
-
 class Blog {
 
   private videoList: string[] = [
@@ -15,7 +13,7 @@ class Blog {
     public  footer: string,
     public  id: number,
     public  image: string,
-    public  subtitle: StringMap,
+    public  subtitle: string,
     public  title: string,
     public  hasVideo: boolean,
     public  videoType?: string,
