@@ -30,35 +30,34 @@ import { FooterComponent } from './components/footer/footer.component';
 import { WINDOW_PROVIDERS } from './providers/window.provider';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    PageNotFoundComponent,
-    HeaderComponent,
-    MenuComponent,
-    AccountComponent,
-    LoginComponent,
-    NewUserDialogComponent,
-    QuestionDialogComponent,
-    FooterComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule,
-    AngularFireDatabaseModule,
-    AngularFireStorageModule,
-    FlexLayoutModule,
-    AppMaterialModule, // import the Angular Material modules after Angular's BrowserModule,
-    HttpClientModule,
-    AppCommonModule,
-  ],
-  providers: [WINDOW_PROVIDERS],
-  bootstrap: [AppComponent],
-  entryComponents: [QuestionDialogComponent, NewUserDialogComponent],
+    declarations: [
+        AppComponent,
+        PageNotFoundComponent,
+        HeaderComponent,
+        MenuComponent,
+        AccountComponent,
+        LoginComponent,
+        NewUserDialogComponent,
+        QuestionDialogComponent,
+        FooterComponent,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        ReactiveFormsModule,
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFireAuthModule,
+        AngularFireDatabaseModule,
+        AngularFireStorageModule,
+        FlexLayoutModule,
+        AppMaterialModule,
+        HttpClientModule,
+        AppCommonModule,
+    ],
+    providers: [WINDOW_PROVIDERS],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) {
