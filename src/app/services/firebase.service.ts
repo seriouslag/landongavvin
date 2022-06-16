@@ -5,7 +5,7 @@ import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/datab
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import firebase from '@firebase/app-compat';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, Observable, Subscription } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Blog } from '../models/Blog';
@@ -56,7 +56,7 @@ export class FirebaseService implements OnDestroy {
     try {
       const ref = this.storage.ref('/').child(path);
       const imageRef = ref.child(fileName);
-      const result = await imageRef.updateMetadata(newMetadata).toPromise();
+      const result = await lastValueFrom(imageRef.updateMetadata(newMetadata));
       console.log('updated image ref', result)
     } catch (e) {
       this.handleStorageErrors(e as firebase.default.FirebaseError);
@@ -177,9 +177,9 @@ export class FirebaseService implements OnDestroy {
           console.error('failed to find user');
           return;
         }
-        const user: User|null = await this.db.object<User>('/users/' + firebaseUser.uid).valueChanges().pipe(
+        const user: User | null = await lastValueFrom(this.db.object<User>('/users/' + firebaseUser.uid).valueChanges().pipe(
           take(1)
-        ).toPromise();
+        ));
 
         if (user !== null) {
           console.log('logged in via Google provider.');
@@ -274,7 +274,7 @@ export class FirebaseService implements OnDestroy {
       if (this.serviceUserReference && uid === this.serviceUserReference.uid && !this.serviceUserReference.profileImage) {
         return null;
       }
-      const response = await this.storage.ref('users').child(uid).child('/profile.jpg').getDownloadURL().pipe(take(1)).toPromise();
+      const response = await lastValueFrom(this.storage.ref('users').child(uid).child('/profile.jpg').getDownloadURL().pipe(take(1)));
       return response;
     } catch (e) {
       return null;
@@ -318,10 +318,10 @@ export class FirebaseService implements OnDestroy {
   }
 
   public async getUserByUID(uid: string): Promise<User|null> {
-    const user = await this.db.object<User>('/users/' + uid).valueChanges()
+    const user = await lastValueFrom(this.db.object<User>('/users/' + uid).valueChanges()
       .pipe(
         take(1),
-      ).toPromise();
+      ));
       const cUser = await this.fbAuth.currentUser;
       if (user && cUser && user.uid === cUser.uid) {
         if (user.isVerified !== cUser.emailVerified) {

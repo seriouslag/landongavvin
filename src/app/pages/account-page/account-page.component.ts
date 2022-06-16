@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { lastValueFrom, Subscription } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntypedFormGroup, UntypedFormControl, Validators, AbstractControl, ValidatorFn, AsyncValidatorFn } from '@angular/forms';
@@ -72,11 +72,11 @@ export class AccountPageComponent implements OnInit, OnDestroy {
 
     const check = false;
     // should do check  on backend to see if request vanity is available but this works for now
-    const vanities = await this.firebaseService.getAllVanities()
+    const vanities = await lastValueFrom(this.firebaseService.getAllVanities()
       .snapshotChanges()
       .pipe(
         take(1)
-      ).toPromise();
+      ));
     for (const vanity of vanities) {
       if (vanity.key === vanityCheck && vanityCheck !== this.user.vanity) {
         return { vanityInUse: true };
@@ -98,7 +98,7 @@ export class AccountPageComponent implements OnInit, OnDestroy {
     this.confirmDialog.componentInstance.customText = 'Reset Password?';
     this.confirmDialog.componentInstance.showButtonText = true;
 
-    const result: number = await this.confirmDialog.afterClosed().toPromise();
+    const result: number = await lastValueFrom(this.confirmDialog.afterClosed());
 
     if (result !== 1) return;
     try {
