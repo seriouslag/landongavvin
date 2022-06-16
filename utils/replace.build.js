@@ -1,5 +1,5 @@
-require('colors');
-const replace = require('replace-in-file');
+import 'colors';
+import replace from 'replace-in-file';
 
 const options = { timeZone: "America/New_York" };
 const estTime = new Date();

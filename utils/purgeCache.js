@@ -1,7 +1,9 @@
-const https = require('https');
+import { request } from 'https';
 
-require('colors');
-require('dotenv').config();
+import 'colors';
+import { config } from 'dotenv';
+
+config();
 
 let error = false;
 let errorMessage = '';
@@ -67,7 +69,7 @@ domains.forEach((domain) => {
     }
   };
 
-  const req = https.request(options, (res) => {
+  const req = request(options, (res) => {
     res.on('data', (d) => {
       const statusCode = res.statusCode;
       console.log(`statusCode: ${statusCode}`)
