@@ -2,7 +2,7 @@ interface User {
   fname: string;
   lname: string;
   email: string;
-  image: string;
+  image?: string;
   bio: string;
   job: string;
   company: string;

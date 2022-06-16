@@ -5,10 +5,10 @@ import { AppRoutingModule } from './modules/app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AngularFireModule } from '@angular/fire';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 import { environment } from '../environments/environment';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';

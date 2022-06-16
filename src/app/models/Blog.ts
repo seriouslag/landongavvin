@@ -1,12 +1,6 @@
+import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
+
 class Blog {
-  content: string;
-  footer: string;
-  id: number;
-  image: string;
-  subtitle: string;
-  title: string;
-  hasVideo: boolean;
-  videoType?: string;
 
   private videoList: string[] = [
     'ogv', 'ogm', 'ogg', 'mp4', 'webm', 'gifv'
@@ -16,7 +10,16 @@ class Blog {
     'png', 'bmp', 'jpeg', 'jpg', 'gif'
   ];
 
-  constructor(content: string, footer: string, id: number, image: string, subtitle: string) {
+  constructor(
+    public  content: string,
+    public  footer: string,
+    public  id: number,
+    public  image: string,
+    public  subtitle: StringMap,
+    public  title: string,
+    public  hasVideo: boolean,
+    public  videoType?: string,
+  ) {
     if (image.length === 0) { return; }
 
     const extension: string = image.substr(image.lastIndexOf('.') + 1).toLowerCase();

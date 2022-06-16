@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import firebase from 'firebase/app';
 import { Subscription } from 'rxjs';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
@@ -10,8 +9,8 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  private fbAuthUserSubscription: Subscription;
-  fbAuthUser: firebase.User = null;
+  private fbAuthUserSubscription: Subscription|undefined;
+  fbAuthUser: firebase.default.User|null = null;
 
   constructor(private firebaseService: FirebaseService) { }
 

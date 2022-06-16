@@ -8,7 +8,7 @@ import { Blog } from 'src/app/models/Blog';
 })
 export class BlogComponent implements OnInit {
 
-  @Input() public blog: Blog;
+  @Input() public blog!: Blog;
 
   constructor() { }
 

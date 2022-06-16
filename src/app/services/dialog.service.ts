@@ -5,16 +5,13 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
   providedIn: 'root'
 })
 export class DialogService {
-  constructor(public dialog: MatDialog) {
-  }
+  constructor(public dialog: MatDialog) {}
 
   openDialog(component: any, config: MatDialogConfig): MatDialogRef<any> {
     return this.dialog.open(component, config);
   }
 
   closeDialogs(): void {
-    if (this.dialog) {
-      this.dialog.closeAll();
-    }
+    this.dialog?.closeAll();
   }
 }

@@ -8,8 +8,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class QuestionDialogComponent {
 
-  customText: string;
-  showButtonText: boolean;
+  customText: string|undefined;
+  showButtonText: boolean|undefined;
 
   constructor(private questionDialog: MatDialogRef<QuestionDialogComponent>) { }
 

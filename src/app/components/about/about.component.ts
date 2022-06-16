@@ -1,20 +1,33 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import firebase from 'firebase/app';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/models/User';
 import { EditModeService } from 'src/app/services/edit-mode.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { SocalLinks } from '../editable/social-link/social-link.component';
+
+export interface UserProperties {
+  bio: string;
+  company: string;
+  job: string;
+  twitter: string;
+  twitch: string;
+  facebook: string;
+  instagram: string;
+  linkedin: string;
+  youtube: string;
+}
+
 
 @Component({
   selector: 'app-about',
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss']
 })
-export class AboutComponent implements OnInit, OnDestroy, OnChanges {
+export class AboutComponent implements OnInit, OnDestroy, OnChanges, UserProperties {
 
   @Input()
-  aboutUser: User;
+  aboutUser!: User;
 
   noImg = true;
 
@@ -22,9 +35,19 @@ export class AboutComponent implements OnInit, OnDestroy, OnChanges {
   showEditBtn = false;
   editBtnText = 'Edit';
 
-  fbAuthUser: firebase.User;
+  fbAuthUser: firebase.default.User|undefined;
 
-  userProperties = [
+  bio: string = '';
+  company: string = '';
+  job: string = '';
+  twitter: string = '';
+  twitch: string = '';
+  facebook: string = '';
+  instagram: string = '';
+  linkedin: string = '';
+  youtube: string = '';
+
+  userProperties: (keyof UserProperties)[] = [
     'bio',
     'company',
     'job',
@@ -34,9 +57,9 @@ export class AboutComponent implements OnInit, OnDestroy, OnChanges {
     'instagram',
     'linkedin',
     'youtube'
-  ];
+  ]
 
-  enabledSocialLinkList = [
+  enabledSocialLinkList: SocalLinks[] = [
     'instagram',
     'facebook',
     'youtube',
@@ -46,8 +69,8 @@ export class AboutComponent implements OnInit, OnDestroy, OnChanges {
     'github'
   ];
 
-  private editSubscription: Subscription;
-  private userSubscription: Subscription;
+  private editSubscription: Subscription|undefined;
+  private userSubscription: Subscription|undefined;
 
   constructor(private editModeService: EditModeService, private firebaseService: FirebaseService, private snackBar: MatSnackBar) {
     for (const property of this.userProperties) {
@@ -124,7 +147,7 @@ export class AboutComponent implements OnInit, OnDestroy, OnChanges {
     return changed;
   }
 
-  public updateUserProperties(property: string, event: string): void {
+  public updateUserProperties(property: keyof UserProperties, event: string): void {
     if (this.editMode === true && event !== undefined) {
 
       this[property] = event;
@@ -147,7 +170,7 @@ export class AboutComponent implements OnInit, OnDestroy, OnChanges {
   private async handleProfilePic() {
     try {
       const imgUrl = await this.firebaseService.getUserProfileImg(this.aboutUser.uid);
-      this.aboutUser.image = imgUrl;
+      this.aboutUser.image = imgUrl ? imgUrl : undefined;
       this.noImg = imgUrl ? false : true;
     } catch (e) {
       this.noImg = true;
@@ -163,7 +186,7 @@ export class AboutComponent implements OnInit, OnDestroy, OnChanges {
   public async editSaveBtn() {
     if (this.editMode === true) {
       // save info to firebase
-      const updateObject = {};
+      const updateObject: Partial<UserProperties> = {};
       let update = false;
 
       for (const property of this.userProperties) {

@@ -1,27 +1,14 @@
 import {
-  Component,
-
-
-
-
-  EventEmitter, Input,
-
-
-
-  OnChanges,
-  OnDestroy, OnInit,
-
-
-  Output, SimpleChanges,
-
-
-
+  Component, EventEmitter, Input,OnChanges,
+  OnDestroy, OnInit, Output, SimpleChanges,
   ViewChild
 } from '@angular/core';
 import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+
+export type SocalLinks = 'instagram'|'github'|'facebook'|'youtube'|'twitter'|'linkedin'|'twitch';
 
 @Component({
   selector: 'app-social-link',
@@ -34,22 +21,22 @@ export class SocialLinkComponent implements OnInit, OnChanges, OnDestroy {
   editMode = false;
 
   @Input()
-  type: string;
+  type: SocalLinks = 'facebook';
 
   @Input()
-  link: string;
+  link: string = '';
 
   @Output()
   notify: EventEmitter<string> = new EventEmitter<string>();
 
-  @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
+  @ViewChild(MatMenuTrigger) menu: MatMenuTrigger | undefined;
 
   href = '';
   icon = '';
   editPanelOpen = false;
 
-  private mediaSubscription: Subscription;
-  mediaAlias: string;
+  private mediaSubscription: Subscription|undefined;
+  mediaAlias: string = '';
 
   constructor(private mediaObserver: MediaObserver ) {}
 
@@ -61,7 +48,6 @@ export class SocialLinkComponent implements OnInit, OnChanges, OnDestroy {
     ).subscribe((mediaAlias: MediaChange) => {
       this.mediaAlias = mediaAlias.mqAlias;
     });
-    this.type = this.type.toLowerCase();
     this.setHREF(this.type);
     if (this.mediaObserver.isActive('xs')) {
       this.mediaAlias = 'xs';
@@ -74,21 +60,19 @@ export class SocialLinkComponent implements OnInit, OnChanges, OnDestroy {
     // when the aboutUser changes change the profile pic
     for (const propName in changes) {
       if (propName === 'type') {
-        this.setHREF(propName);
+        this.setHREF(propName as SocalLinks);
       } else if (propName === 'link') {
-        this.type = this.type.toLowerCase();
+        this.type = this.type.toLowerCase() as SocalLinks;
         this.setHREF(this.type);
       }
     }
   }
 
   ngOnDestroy(): void {
-    if (this.mediaSubscription) {
-      this.mediaSubscription.unsubscribe();
-    }
+    this.mediaSubscription?.unsubscribe();
   }
 
-  private setHREF(type: string) {
+  private setHREF(type: SocalLinks) {
     this.href = '';
     this.icon = '';
     switch (type) {
@@ -135,7 +119,7 @@ export class SocialLinkComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private closeMenu(): void {
-    this.menu.closeMenu();
+    this.menu?.closeMenu();
   }
 
   public onEnter() {

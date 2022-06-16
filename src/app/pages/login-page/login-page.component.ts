@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import firebase from 'firebase/app';
 import { Subscription } from 'rxjs';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
@@ -11,10 +10,10 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 })
 export class LoginPageComponent implements OnInit, OnDestroy {
 
-  private routerSubscription: Subscription;
-  private redirectAfterLogin: string;
-  private userSubscription: Subscription;
-  fbAuthUser: firebase.User;
+  private routerSubscription: Subscription|undefined;;
+  private redirectAfterLogin: string|undefined;
+  private userSubscription: Subscription|undefined;
+  fbAuthUser: firebase.default.User|undefined;
 
   constructor(private activatedRoute: ActivatedRoute, private firebaseService: FirebaseService) {}
 
@@ -30,12 +29,11 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.routerSubscription) {
-      this.routerSubscription.unsubscribe();
-    }
+    this.routerSubscription?.unsubscribe();
+    this.userSubscription?.unsubscribe();
   }
 
-  signOut(): void {
-    this.firebaseService.logout();
+  async signOut(): Promise<void> {
+    await this.firebaseService.logout();
   }
 }

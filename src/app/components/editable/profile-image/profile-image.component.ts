@@ -8,10 +8,10 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ProfileImageComponent {
 
   @Input()
-  src: string;
+  src!: string;
 
   @Input()
-  editMode: boolean;
+  editMode!: boolean;
 
   constructor() { }
 }

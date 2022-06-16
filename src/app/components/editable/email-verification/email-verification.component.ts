@@ -10,15 +10,15 @@ import { User } from 'src/app/models/User';
 export class EmailVerificationComponent {
 
   @Input()
-  editMode: boolean;
+  editMode!: boolean;
 
   @Input()
-  editUser: User;
+  editUser!: User;
 
   constructor(private firebaseService: FirebaseService) { }
 
-  public sendEmailVerification(): void {
-    this.firebaseService.sendEmailVerification();
+  public async sendEmailVerification(): Promise<void> {
+    await this.firebaseService.sendEmailVerification();
   }
 
 }

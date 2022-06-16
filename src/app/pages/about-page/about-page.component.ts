@@ -13,24 +13,24 @@ export class AboutPageComponent implements OnInit, OnDestroy {
 
   waiting = true;
   failed = false;
-  aboutUser: User;
-  aboutUID: string;
+  aboutUser: User|null = null;
+  aboutUID: string|undefined;
 
-  private routerSubscription: Subscription;
-  private vanitySubscription: Subscription;
-  private userSubscription: Subscription;
+  private routerSubscription: Subscription|undefined;
+  private vanitySubscription: Subscription|undefined;
+  private userSubscription: Subscription|undefined;
 
   constructor(private firebaseService: FirebaseService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.routerSubscription = this.activatedRoute.params.subscribe(params => {
       if (params.vanity) {
-        this.vanitySubscription = this.firebaseService.getUIDByVanity(params.vanity.toLowerCase()).subscribe((aboutUID) => {
+        this.vanitySubscription = this.firebaseService.getUIDByVanity(params.vanity.toLowerCase()).subscribe(async (aboutUID) => {
           this.waiting = false;
           this.aboutUID = aboutUID;
-          if (this.aboutUID != null) {
+          if (this.aboutUID) {
             this.failed = false;
-            this.getUserByUID(this.aboutUID);
+            await this.fetchUserInfo();
           } else {
             this.failed = true;
             this.aboutUser = null;
@@ -41,25 +41,18 @@ export class AboutPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.vanitySubscription) {
-      this.vanitySubscription.unsubscribe();
-    }
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
-    }
-    if (this.routerSubscription) {
-      this.routerSubscription.unsubscribe();
-    }
+    this.vanitySubscription?.unsubscribe();
+    this.userSubscription?.unsubscribe();
+    this.routerSubscription?.unsubscribe();
   }
 
-  private getUserByUID(uid: string) {
-    this.userSubscription = this.firebaseService.getUserByUID(uid).subscribe(aboutUser => {
-      this.aboutUser = aboutUser;
-      if (aboutUser === null) {
-        this.failed = true;
-        this.waiting = false;
-      }
-    });
+  private async fetchUserInfo() {
+    if (!this.aboutUID) return;
+    const user = await this.firebaseService.getUserByUID(this.aboutUID)
+    this.aboutUser = user;
+    if (user === null) {
+      this.failed = true;
+      this.waiting = false;
+    }
   }
-
 }

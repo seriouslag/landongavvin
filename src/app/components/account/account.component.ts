@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import firebase from 'firebase/app';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/models/User';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -10,10 +9,10 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   styleUrls: ['./account.component.scss']
 })
 export class AccountComponent implements OnInit, OnDestroy {
-  user: User;
-  fbAuthUser: firebase.User;
-  private userSubscription: Subscription;
-  private fbAuthUserSubscription: Subscription;
+  user: User|undefined|null;
+  fbAuthUser: firebase.default.User|undefined;
+  private userSubscription: Subscription|undefined;
+  private fbAuthUserSubscription: Subscription|undefined;
 
   constructor(private firebaseService: FirebaseService) { }
 
@@ -27,16 +26,11 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
-    }
-
-    if (this.fbAuthUserSubscription) {
-      this.fbAuthUserSubscription.unsubscribe();
-    }
+    this.userSubscription?.unsubscribe();
+    this.fbAuthUserSubscription?.unsubscribe();
   }
 
-  public logout(): void {
-    this.firebaseService.logout();
+  public async logout(): Promise<void> {
+    await this.firebaseService.logout();
   }
 }

@@ -8,19 +8,19 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class TextInputComponent {
 
   @Input()
-  editMode: boolean;
+  editMode!: boolean
 
   @Input()
-  text: string;
+  text!: string;
 
   @Input()
-  placeholder: string;
+  placeholder!: string;
 
   @Input()
-  type: string;
+  type!: string;
 
   @Input()
-  maxlength: number;
+  maxlength!: number;
 
   @Output()
   notify: EventEmitter<string> = new EventEmitter<string>();

@@ -2,13 +2,21 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl, ValidatorFn, AsyncValidatorFn } from '@angular/forms';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { DialogService } from 'src/app/services/dialog.service';
 import { User } from 'src/app/models/User';
 import { take } from 'rxjs/operators';
 import { UserUpdateRequest } from 'src/app/models/UserUpdateRequest';
 import { QuestionDialogComponent } from 'src/app/components/dialogs/question-dialog/question-dialog.component';
+
+const VanityValidator: ValidatorFn = (fc: AbstractControl) => {
+  const VANITY_REGEXP = /^[a-zA-Z0-9]{2,29}$/;
+
+return VANITY_REGEXP.test(fc.value) ? null : {
+  vanityCheck: true
+};
+  }
 
 @Component({
   selector: 'app-account-page',
@@ -17,17 +25,17 @@ import { QuestionDialogComponent } from 'src/app/components/dialogs/question-dia
 })
 export class AccountPageComponent implements OnInit, OnDestroy {
 
-  private userSubscription: Subscription;
+  private userSubscription: Subscription|undefined;
 
-  user: User;
+  user: User|null;
 
-  confirmDialog: MatDialogRef<QuestionDialogComponent>;
+  confirmDialog: MatDialogRef<QuestionDialogComponent>|undefined;
 
   settingsForm: FormGroup = new FormGroup({
     firstname: new FormControl(null, [Validators.minLength(2)]),
     lastname: new FormControl(null, [Validators.minLength(2)]),
     vanity: new FormControl(null,
-      [Validators.minLength(3), Validators.maxLength(30), AccountPageComponent.validateVanity], [this.vanityMatchValidator.bind(this)])
+      [Validators.minLength(3), Validators.maxLength(30), VanityValidator], [this.vanityMatchValidator.bind(this)])
   });
 
   constructor(private firebaseService: FirebaseService, private dialogService: DialogService, private snackBar: MatSnackBar) {
@@ -40,14 +48,6 @@ export class AccountPageComponent implements OnInit, OnDestroy {
       github: '',
       uid: '', image: '', isVerified: false
     } as User;
-  }
-
-  static validateVanity(fc: FormControl) {
-    const VANITY_REGEXP = /^[a-zA-Z0-9]{2,29}$/;
-
-    return VANITY_REGEXP.test(fc.value) ? null : {
-      vanityCheck: true
-    };
   }
 
   ngOnInit() {
@@ -63,55 +63,57 @@ export class AccountPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
-    }
+    this.userSubscription?.unsubscribe();
   }
 
-  private vanityMatchValidator(control: AbstractControl): Promise<any> {
+  private async vanityMatchValidator(control: AbstractControl) {
+    if (!this.user) return null;
     const vanityCheck = control.value;
 
     const check = false;
     // should do check  on backend to see if request vanity is available but this works for now
-    return new Promise(resolve => {
-      const req = this.firebaseService.getAllVanities().snapshotChanges();
-      req
+    const vanities = await this.firebaseService.getAllVanities()
+      .snapshotChanges()
       .pipe(
         take(1)
-      ).subscribe(vanities => {
-        for (const vanity of vanities) {
-          if (vanity.key === vanityCheck && vanityCheck !== this.user.vanity) {
-            return resolve({ vanityInUse: true });
-          }
-        }
+      ).toPromise();
+    for (const vanity of vanities) {
+      if (vanity.key === vanityCheck && vanityCheck !== this.user.vanity) {
+        return { vanityInUse: true };
+      }
+    }
 
-        if (check === false) {
-          return resolve(null);
-        }
-      });
-    });
+    if (check === false) {
+      return null;
+    }
+    return null;
   }
 
-  public resetPassword(): void {
+  public async resetPassword(): Promise<void> {
+    if (!this.user) {
+      this.snackBar.open('No user is logged in.', 'OK', { duration: 5000 });
+      return;
+    }
     this.confirmDialog = this.dialogService.openDialog(QuestionDialogComponent, {});
     this.confirmDialog.componentInstance.customText = 'Reset Password?';
     this.confirmDialog.componentInstance.showButtonText = true;
 
-    this.confirmDialog.afterClosed().pipe(take(1)).subscribe(result => {
-      if (result === 1) {
-        this.firebaseService.sendPasswordResetEmail(this.user.email, {}).then(() => {
-          this.snackBar.open('Password reset email sent to ' + this.user.email + '.', 'OK', { duration: 5000 });
-        }).catch(() => {
-          this.snackBar.open('Something went wrong, try again later.', 'OK', { duration: 5000 });
-        });
-      } else {
-        // Did nothing
-      }
-    });
+    const result: number = await this.confirmDialog.afterClosed().toPromise();
 
+    if (result !== 1) return;
+    try {
+      await this.firebaseService.sendPasswordResetEmail(this.user.email, {});
+      this.snackBar.open('Password reset email sent to ' + this.user.email + '.', 'OK', { duration: 5000 });
+    } catch(err) {
+      this.snackBar.open('Something went wrong, try again later.', 'OK', { duration: 5000 });
+    }
   }
 
-  public saveUserInfo(): void {
+  public async saveUserInfo(): Promise<void> {
+    if (!this.user) {
+      this.snackBar.open('No user is logged in.', 'OK', { duration: 5000 });
+      return;
+    }
     const update: UserUpdateRequest = {
       fname: '', lname: ''
     };
@@ -122,10 +124,10 @@ export class AccountPageComponent implements OnInit, OnDestroy {
       update.lname = this.settingsForm.controls.lastname.value;
     }
     if (this.user.vanity !== this.settingsForm.controls.vanity.value) {
-      this.firebaseService.setUserVanity(this.settingsForm.controls.vanity.value);
+      await this.firebaseService.setUserVanity(this.settingsForm.controls.vanity.value);
     }
 
-    this.firebaseService.updateUserInfo(update);
+    await this.firebaseService.updateUserInfo(update);
 
     this.snackBar.open('You account information has been updated :D', 'OK', { duration: 3000 });
   }

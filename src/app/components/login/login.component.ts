@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   submitted = false;
   action = false;
 
-  newuserDialog: MatDialogRef<NewUserDialogComponent>;
+  newuserDialog: MatDialogRef<NewUserDialogComponent>|undefined;
 
   public closedLogin = false;
 
@@ -49,33 +49,44 @@ export class LoginComponent implements OnInit {
               private dialogService: DialogService, private snackbar: MatSnackBar,
               private router: Router) {}
 
-  static passwordMatchValidator(fg: FormGroup) {
-    const password = fg.get('password').value;
-    const cpassword = fg.get('cpassword').value;
+  static passwordMatchValidator(fg: AbstractControl) {
+    const passwordField = fg.get('password');
+    const cpasswordField = fg.get('password');
 
-    if (password === cpassword) {
-      fg.get('cpassword').setErrors(null);
+    if (!passwordField) throw 'Password field is missing!';
+    if (!cpasswordField) throw 'Confirm password field is missing!';
+
+    const passwordValue = passwordField.value!;
+    const cpasswordValue = cpasswordField.value;
+
+    if (passwordValue === cpasswordValue) {
+      cpasswordField.setErrors(null);
       return null;
     } else {
-      fg.get('cpassword').setErrors({ mismatch: true });
+      cpasswordField.setErrors({ mismatch: true });
       return { mismatch: true };
     }
   }
 
-  static emailMatchValidator(fg: FormGroup) {
-    const email = fg.get('email').value;
-    const cemail = fg.get('cemail').value;
+  static emailMatchValidator(fg: AbstractControl) {
+    const emailField = fg.get('email')
+    const cEmailField = fg.get('cemail')
+
+    if (!emailField) throw 'Password field is missing!';
+    if (!cEmailField) throw 'Confirm password field is missing!';
+    const email = emailField.value;
+    const cemail = cEmailField.value;
 
     if (email.toLowerCase() === cemail.toLowerCase()) {
-      fg.get('cemail').setErrors(null);
+      cEmailField.setErrors(null);
       return null;
     } else {
-      fg.get('cemail').setErrors({ mismatch: true });
+      cEmailField.setErrors({ mismatch: true });
       return { mismatch: true };
     }
   }
 
-  static validatePW(fc: FormControl) {
+  static validatePW(fc: AbstractControl) {
     // old
     // const PW_REGEXP = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@!%*?&()])[A-Za-z\d$@!%*?&]{8,}/;
 
@@ -89,7 +100,7 @@ export class LoginComponent implements OnInit {
     };
   }
 
-  static validateEmail(fc: FormControl): any {
+  static validateEmail(fc: AbstractControl) {
     // tslint:disable-next-line: max-line-length
     const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,12}))/i;
 

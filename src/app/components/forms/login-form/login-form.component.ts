@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class LoginFormComponent implements OnInit {
 
   constructor(private firebaseService: FirebaseService) { }
 
-  static validateEmail(fc: FormControl): any {
+  static validateEmail(fc: AbstractControl) {
     // tslint:disable-next-line: max-line-length
     const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,12}))/i;
 
@@ -24,13 +24,13 @@ export class LoginFormComponent implements OnInit {
     };
   }
 
-  public loginWithEmail(): void {
-    this.firebaseService.loginWithEmailProvider(this.loginForm.controls.email.value.toLowerCase(),
+  public async loginWithEmail(): Promise<void> {
+    await this.firebaseService.loginWithEmailProvider(this.loginForm.controls.email.value.toLowerCase(),
       this.loginForm.controls.password.value);
   }
 
-  public loginWithGoogle(): void {
-    this.firebaseService.loginWithGoogleProvider();
+  public async loginWithGoogle(): Promise<void> {
+    await this.firebaseService.loginWithGoogleProvider();
   }
 
   ngOnInit(): void {

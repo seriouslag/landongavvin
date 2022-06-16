@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -11,11 +11,11 @@ import { Subscription } from 'rxjs';
   templateUrl: './new-user-dialog.component.html',
   styleUrls: ['./new-user-dialog.component.scss']
 })
-export class NewUserDialogComponent implements OnInit {
+export class NewUserDialogComponent implements OnInit, OnDestroy {
 
-  firebaseService: FirebaseService;
-  user: User;
-  userSubscription: Subscription;
+  user: User|undefined|null;
+  userSubscription: Subscription|undefined;
+  firebaseService: FirebaseService|undefined;
 
   occupationForm: FormGroup = new FormGroup({
     occupation: new FormControl(null, [Validators.required])
@@ -30,16 +30,23 @@ export class NewUserDialogComponent implements OnInit {
   constructor(private newuserDialog: MatDialogRef<NewUserDialogComponent>, private snackBar: MatSnackBar) {}
 
   ngOnInit() {
+    if (!this.firebaseService) throw 'No firebase service set!';
     this.userSubscription = this.firebaseService.user.subscribe((user) => {
       this.user = user;
     });
   }
 
-  public sendEmailVerification() {
-    this.firebaseService.sendEmailVerification();
+  ngOnDestroy() {
+    this.userSubscription?.unsubscribe();
+  }
+
+  public async sendEmailVerification(): Promise<void> {
+    if (!this.firebaseService) throw 'No firebase service set!';
+    await this.firebaseService.sendEmailVerification();
   }
 
   public async saveInfo(): Promise<void> {
+    if (!this.firebaseService) throw 'No firebase service set!';
     const updateObject = {
       job: this.occupationForm.controls.occupation.value,
       company: this.companyForm.controls.company.value,

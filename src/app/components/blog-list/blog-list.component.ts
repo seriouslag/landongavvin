@@ -11,7 +11,7 @@ import { tap } from 'rxjs/operators';
 })
 export class BlogListComponent implements OnInit, OnDestroy {
 
-  blogsSubscription: Subscription;
+  blogsSubscription: Subscription|undefined;
   blogs: Blog[] = [];
   loading = true;
   failed = false;
@@ -35,8 +35,6 @@ export class BlogListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.blogsSubscription) {
-      this.blogsSubscription.unsubscribe();
-    }
+    this.blogsSubscription?.unsubscribe();
   }
 }
