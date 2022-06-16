@@ -80,7 +80,7 @@
           matInput
           matTextareaAutosize
           formControlName="bio"
-          [matAutosizeMaxRows]="15"
+          [cdkTextareaAutosize]="true"
           placeholder="Write a little about yourself"
           [attr.maxlength]="280"
         ></textarea>
@@ -108,7 +108,7 @@
       Get Verified
     </ng-template>
     <div fxLayout="column">
-      <button 
+      <button
         type="button"
         mat-button
         (click)="sendEmailVerification()"
