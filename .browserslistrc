@@ -3,7 +3,6 @@
 # https://github.com/browserslist/browserslist#queries
 #
 
-> 0.5%
-last 2 versions
-Firefox ESR
-not dead
+> 0.25%
+not ie 11
+not op_mini all
